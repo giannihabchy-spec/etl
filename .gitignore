@@ -9,6 +9,7 @@ __pycache__/
 *$py.class
 
 # notebook junk
+notebooks/
 .ipynb_checkpoints/
 
 # OS/editor
@@ -19,5 +20,3 @@ Thumbs.db
 
 # logs + outputs (if you have them)
 *.log
-data/
-outputs/
