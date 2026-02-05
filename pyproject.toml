@@ -14,6 +14,8 @@ dependencies = [
     "pandas>=3.0.0",
 ]
 
-[tool.setuptools] package-dir = {"" = "src"} 
+[tool.setuptools] 
+package-dir = {"" = "src"} 
 
-[tool.setuptools.packages.find] where = ["src"]
+[tool.setuptools.packages.find] 
+where = ["src"]
