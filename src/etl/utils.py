@@ -14,15 +14,15 @@ def keep_cols_by_index(data, indices):
     return data.iloc[:,indices].copy()
 
 
-def drop_na_by_name(data, col_name):
-    if isinstance(col_name, str):
-        raise TypeError("col_names must be a list of column names, not a string")
+def drop_na_by_name(data, col_name, how = 'any'):
+    if not isinstance(col_name, list):
+        raise TypeError("col_names must be a list of column names")
 
     missing = [c for c in col_name if c not in data.columns]
     if missing:
         raise KeyError(f"Missing columns: {missing}")
 
-    return data.dropna(subset=list(col_name)).copy()
+    return data.dropna(subset=list(col_name), how = how).copy()
 
 
 def make_columns_numeric(data, cols, er = 'raise'):
@@ -42,3 +42,14 @@ def make_columns_numeric(data, cols, er = 'raise'):
     return data
 
 
+def remove_repeated_headers(data, col):
+    if not isinstance(col, str):
+        raise TypeError("Column name must be a string")
+
+    if col not in data.columns:
+        raise KeyError(f"{col} is not a column in the dataframe")
+
+    col_norm = col.strip().lower()
+    values_norm = (data[col].astype(str).str.strip().str.lower())
+
+    return data[values_norm != col_norm].copy()
