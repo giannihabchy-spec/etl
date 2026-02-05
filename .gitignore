@@ -21,3 +21,5 @@ Thumbs.db
 # logs + outputs (if you have them)
 *.log
 *.egg-info/
+
+src/etl/paths.py
