@@ -42,12 +42,39 @@ def make_columns_numeric(data, cols, er = 'raise'):
     if not isinstance(cols,list):
         raise TypeError('cols must be a list of column names')
     
-    missing = [c for c in cols if c not in data.columns]
+    original_norm = data.columns.str.strip().str.lower()
+    cols_norm = [c.strip().lower() for c in cols]
+
+    missing = [cols[i] for i,c in enumerate(cols_norm) if c not in original_norm]
     if missing:
         raise KeyError(f'Missing columns: {missing}')
     
-    for c in cols:
+    ids = [original_norm.get_loc(c) for c in cols_norm]
+
+    for c in data.columns[ids]:
         data[c] = pd.to_numeric(data[c], errors = er)
+
+    return data
+    
+
+def make_columns_date(data, cols, er = 'raise'):
+    if er not in {"raise", "coerce", "ignore"}:
+        raise ValueError("er must be one of: 'raise', 'coerce', 'ignore'")
+
+    if not isinstance(cols,list):
+        raise TypeError('cols must be a list of column names')
+    
+    original_norm = data.columns.str.strip().str.lower()
+    cols_norm = [c.strip().lower() for c in cols]
+
+    missing = [cols[i] for i,c in enumerate(cols_norm) if c not in original_norm]
+    if missing:
+        raise KeyError(f'Missing columns: {missing}')
+    
+    ids = [original_norm.get_loc(c) for c in cols_norm]
+
+    for c in data.columns[ids]:
+        data[c] = pd.to_datetime(data[c], errors = er).dt.date
 
     return data
 
@@ -64,4 +91,5 @@ def remove_repeated_headers(data, col):
 
     return data[values_norm != col_norm].copy()
 
- 
+
+
