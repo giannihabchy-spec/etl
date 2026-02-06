@@ -92,4 +92,20 @@ def remove_repeated_headers(data, col):
     return data[values_norm != col_norm].copy()
 
 
+def drop_rows(data,col,value=r'\d{4}-\d{2}-\d{2}',date=False):
+    if not isinstance(col,str):
+        raise TypeError('col must be a column name')
+    
+    if not isinstance(value,str):
+        raise TypeError('value must be a string')
+    
+    cols_norm = data.columns.str.strip().str.lower()
+    if col.strip().lower() not in cols_norm:
+        raise KeyError(f'{col} is not a column in the dataframe')
+    
+    real_col = data.columns[cols_norm.get_loc(col.strip().lower())]
 
+    if date:
+        return data[~data[real_col].astype(str).str.contains(value,regex=True,na=False)].copy()
+    
+    return data[data[real_col] != value].copy()
