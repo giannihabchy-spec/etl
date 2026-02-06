@@ -64,14 +64,4 @@ def remove_repeated_headers(data, col):
 
     return data[values_norm != col_norm].copy()
 
-
-
-# def drop_na_by_name(data, col_names, how = 'any'):
-#     if not isinstance(col_names, list):
-#         raise TypeError("col_names must be a list of column names")
-
-#     missing = [c for c in col_names if c not in data.columns.str.strip().str.lower()]
-#     if missing:
-#         raise KeyError(f"Missing columns: {missing}")
-
-#     return data.dropna(subset=list(col_names))    
+ 
