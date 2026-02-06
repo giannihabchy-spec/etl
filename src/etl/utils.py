@@ -14,15 +14,25 @@ def keep_cols_by_index(data, indices):
     return data.iloc[:,indices].copy()
 
 
-def drop_na_by_name(data, col_name, how = 'any'):
-    if not isinstance(col_name, list):
+def drop_na_by_name(data, col_names, how="any"):
+    if not isinstance(col_names, list):
         raise TypeError("col_names must be a list of column names")
 
-    missing = [c for c in col_name if c not in data.columns]
+    original_norm = data.columns.str.strip().str.lower()
+    col_names_norm = [c.strip().lower() for c in col_names]
+
+    missing = [
+        col_names[i]
+        for i, c in enumerate(col_names_norm)
+        if c not in original_norm
+    ]
     if missing:
         raise KeyError(f"Missing columns: {missing}")
 
-    return data.dropna(subset=list(col_name), how = how).copy()
+    ids = [original_norm.get_loc(c) for c in col_names_norm]
+    subset = data.columns[ids]
+
+    return data.dropna(subset = subset, how = how).copy()
 
 
 def make_columns_numeric(data, cols, er = 'raise'):
@@ -53,3 +63,15 @@ def remove_repeated_headers(data, col):
     values_norm = (data[col].astype(str).str.strip().str.lower())
 
     return data[values_norm != col_norm].copy()
+
+
+
+# def drop_na_by_name(data, col_names, how = 'any'):
+#     if not isinstance(col_names, list):
+#         raise TypeError("col_names must be a list of column names")
+
+#     missing = [c for c in col_names if c not in data.columns.str.strip().str.lower()]
+#     if missing:
+#         raise KeyError(f"Missing columns: {missing}")
+
+#     return data.dropna(subset=list(col_names))    
