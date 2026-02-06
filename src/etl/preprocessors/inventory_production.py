@@ -9,7 +9,7 @@ from etl.utils import make_columns_date, make_columns_numeric
 def preprocess(path):
     data = read(path)
     data = keep_cols_by_index(data,[0,4,7,11])
-    data.columns = ['Date', 'Location Description', 'Qty', 'Product  Description']
+    data.columns = ['Date', 'Location Description', 'Qty', 'Product Description']
     data = remove_repeated_headers(data,'Date')
     data = drop_na_by_name(data,['Location description'])
     data = drop_na_by_name(data,['qty'])
