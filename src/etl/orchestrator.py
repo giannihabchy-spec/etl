@@ -1,0 +1,65 @@
+from pathlib import Path
+from etl.preprocessors import discount_by_category_by_department
+from etl.preprocessors import discount_by_description_by_employee
+from etl.preprocessors import discount_by_items
+from etl.preprocessors import inventory_history
+from etl.preprocessors import inventory_production
+from etl.preprocessors import programming_summary_inventory
+from etl.preprocessors import programming_summary_sales
+from etl.preprocessors import purchase_master_report_for_all_branches
+from etl.preprocessors import requisition_summary
+from etl.preprocessors import requisition_summary_IB
+from etl.preprocessors import sales_by_items
+from etl.preprocessors import sales_item_by_transaction
+from etl.preprocessors import sales_item_wastage
+from etl.preprocessors import sales_items_ingerdients
+from etl.preprocessors import summary_of_sales_by_customer_by_item
+from etl.preprocessors import wastage_report
+
+
+cleaner_by_code = {
+    'REP_I_0022.xlsx': ('sales items ingredients' , sales_items_ingerdients.preprocess),
+    'REP_I_00023D_rows.xlsx': ('wastage report' , wastage_report.preprocess),
+    'REP_I_0024.xlsx': ('inventory production' , inventory_production.preprocess),
+    'REP_I_0033_rows.xlsx': ('inventory history' , inventory_history.preprocess),
+    'REP_I_0044.xlsx': ('programming summary inventory' , programming_summary_inventory.preprocess),
+    'REP_I_00074.xlsx': ('sales item wastage' , sales_item_wastage.preprocess),
+    'REP_I_0087.xlsx': ('requisition summary' , requisition_summary.preprocess),
+    'REP_I_0087_IB.xlsx': ('requisition summary IB',requisition_summary_IB.preprocess),
+    'REP_I_00268.xlsx': ('summary of sales by customer by item' , summary_of_sales_by_customer_by_item.preprocess),
+    'REP_I_00462.xlsx': ('purchase master report for all branches' , purchase_master_report_for_all_branches.preprocess),
+    'rep_s_00016.xlsx': ('discount by items' , discount_by_items.preprocess),
+    'rep_s_00161.xlsx': ('discount by category by department' , discount_by_category_by_department.preprocess),
+    'REP_S_00175.xlsx': ('sales item by transaction' , sales_item_by_transaction.preprocess),
+    'REP_S_00178_branch.xlsx': ('programming summary sales' , programming_summary_sales.preprocess),
+    'rep_s_00191_rows.xlsx': ('sales by items' , sales_by_items.preprocess),
+    'rep_s_00438.xlsx': ('discount by description by employee' , discount_by_description_by_employee.preprocess)
+}
+
+
+
+def clean_folder(folder: str | Path) -> dict[str, object]:
+
+    folder = Path(folder)
+    if not folder.exists() or not folder.is_dir():
+        raise NotADirectoryError(f"Folder not found or not a directory: {folder}")
+
+    cleaned = {}
+
+    for p in folder.iterdir():
+        if not p.is_file():
+            continue
+
+        entry = cleaner_by_code.get(p.name)
+        if entry is None:
+            continue  # unknown file
+
+        output_name, cleaner = entry
+
+        try:
+            cleaned[output_name] = cleaner(str(p))
+            print(f"Cleaned {p.name} -> {output_name}")
+        except Exception as e:
+            print(f"Failed cleaning {p.name} -> {output_name}\n{e}")
+
+    return cleaned
