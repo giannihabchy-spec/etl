@@ -1,4 +1,5 @@
 from pathlib import Path
+import pandas as pd
 from etl.preprocessors import discount_by_category_by_department
 from etl.preprocessors import discount_by_description_by_employee
 from etl.preprocessors import discount_by_items
@@ -39,7 +40,6 @@ cleaner_by_code = {
 
 
 def clean_folder(folder: str | Path) -> dict[str, object]:
-
     folder = Path(folder)
     if not folder.exists() or not folder.is_dir():
         raise NotADirectoryError(f"Folder not found or not a directory: {folder}")
@@ -52,13 +52,21 @@ def clean_folder(folder: str | Path) -> dict[str, object]:
 
         entry = cleaner_by_code.get(p.name)
         if entry is None:
-            continue  # unknown file
+            continue
 
         output_name, cleaner = entry
 
         try:
-            cleaned[output_name] = cleaner(str(p))
+            result = cleaner(str(p))
+            cleaned[output_name] = result
+
+            if isinstance(result, pd.DataFrame):
+                nan_cols = result.columns[result.isna().any()].tolist()
+                if nan_cols:
+                    print(f"⚠ NaNs in {output_name}: {nan_cols}")
+
             print(f"Cleaned {p.name} -> {output_name}")
+
         except Exception as e:
             print(f"Failed cleaning {p.name} -> {output_name}\n{e}")
 
