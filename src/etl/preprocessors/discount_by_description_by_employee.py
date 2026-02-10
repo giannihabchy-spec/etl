@@ -12,5 +12,5 @@ def preprocess(path):
     data = drop_na_by_name(data,['Check','Discount'])
     data = remove_repeated_headers(data,'Discount')
     data = make_columns_numeric(data,['Discount','Amount'])
-    data['Discount %'] = data['Discount'] / data['Amount']
+    data['Discount_Percentage'] = data['Discount'] / data['Amount']
     return data
