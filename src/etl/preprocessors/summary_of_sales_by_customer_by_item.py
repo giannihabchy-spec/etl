@@ -4,6 +4,14 @@ from etl.utils import keep_cols_by_index
 from etl.utils import remove_repeated_headers
 from etl.utils import drop_na_by_name
 from etl.utils import make_columns_numeric
+import warnings
+
+warnings.filterwarnings(
+    "ignore",
+    message="Could not infer format*",
+    category=UserWarning,
+)
+
 
 
 def preprocess(path):
