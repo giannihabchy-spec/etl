@@ -10,4 +10,5 @@ def preprocess(path):
     data.columns = ['Check','Description','QTY']
     data = drop_na_by_name(data,['description','qty'])
     data = make_columns_numeric(data,['QTY'])
+    data = data.reset_index(drop = True)
     return data
