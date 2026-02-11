@@ -8,7 +8,6 @@ def write_master(
     output_path: str | None = None,
     clear_first: bool = False,
 ) -> None:
-
     if output_path is None:
         output_path = master_path
 
@@ -18,41 +17,48 @@ def write_master(
 
         for job in jobs:
             try:
-                df = cleaned[job["key"]].loc[:, job["df_cols"]].copy()
+                df = cleaned[job["key"]].copy()
                 sht = wb.sheets[job["sheet"]]
             except KeyError as e:
                 print(f"⚠ {job.get('key','?')} not available: {e}")
                 continue
 
-            start_row = int(job["start_row"])
-            first_col = job["excel_cols"][0]
-            last_col = job["excel_cols"][-1]
+            df_cols = list(job["df_cols"])
+            excel_cols = list(job["excel_cols"])
 
-            # target block: from start_row down to bottom of sheet
-            block = sht.range(
-                f"{first_col}{start_row}:{last_col}{sht.cells.last_cell.row}"
-            )
+            if len(df_cols) != len(excel_cols):
+                print(f"⚠ {job.get('key','?')} df_cols and excel_cols length mismatch")
+                continue
+
+            try:
+                df = df.loc[:, df_cols]
+            except KeyError as e:
+                print(f"⚠ {job.get('key','?')} missing df column: {e}")
+                continue
+
+            start_row = int(job["start_row"])
 
             if clear_first:
-                block.value = None
                 write_row = start_row
+                for col in excel_cols:
+                    sht.range(f"{col}{start_row}:{col}{sht.cells.last_cell.row}").value = None
             else:
-                vals = block.value  # 2D list or None
-                if not vals:
-                    write_row = start_row
-                else:
-                    # find last row in the block that has ANY non-empty cell
-                    last_nonempty_offset = -1
-                    for i, row in enumerate(vals):
-                        if row is None:
-                            continue
-                        if any(cell not in (None, "") for cell in row):
-                            last_nonempty_offset = i
+                last_row = start_row - 1
+                bottom = sht.cells.last_cell.row
 
-                    write_row = start_row if last_nonempty_offset == -1 else start_row + last_nonempty_offset + 1
+                for col in excel_cols:
+                    vals = sht.range(f"{col}{start_row}:{col}{bottom}").value
+                    if not vals:
+                        continue
+                    for i, v in enumerate(vals):
+                        if v not in (None, ""):
+                            last_row = max(last_row, start_row + i)
 
-            start_cell = f"{first_col}{write_row}"
-            sht.range(start_cell).options(index=False, header=False).value = df.to_numpy()
+                write_row = start_row if last_row < start_row else last_row + 1
+
+            for col_name, excel_col in zip(df_cols, excel_cols):
+                rng = f"{excel_col}{write_row}"
+                sht.range(rng).options(index=False, header=False).value = df[[col_name]].to_numpy()
 
         wb.save(output_path)
         wb.close()
