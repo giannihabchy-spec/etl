@@ -4,7 +4,6 @@ import xlwings as xw
 def write_master(
     master_path: str,
     cleaned: dict[str, pd.DataFrame],
-    merged: dict[str, pd.DataFrame],
     jobs: list[dict],
     output_path: str | None = None,
     clear_first: bool = False,
@@ -16,10 +15,10 @@ def write_master(
     app = xw.App(visible=False, add_book=False)
     try:
         wb = app.books.open(master_path)
+        src = cleaned
 
         for job in jobs:
             try:
-                src = cleaned if job["source"] == "cleaned" else merged
                 df = src[job["key"]][job["df_cols"]].copy()
                 sht = wb.sheets[job["sheet"]]
             except KeyError as e:
