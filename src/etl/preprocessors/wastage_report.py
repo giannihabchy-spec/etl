@@ -14,6 +14,7 @@ def preprocess(path):
     data = remove_repeated_headers(data,'Qty')
     cols = ['Location','Qty','Product Description','Remark','Date']
     data = data[cols]
+    data = drop_na_by_name(data,['Date'])
     data = make_columns_numeric(data,['Qty'])
     data = make_columns_date(data,['Date'])
     return data
