@@ -2,7 +2,7 @@ JOBS = [
 
     { #  -> programming summary sales -> SP ####----------
     "key": "programming summary sales",
-    "df_cols": ['Description', 'Price Level 1'],
+    "df_cols": ['Description', 'Price'],
     "sheet": "SP",
     "excel_cols": ['A','B'],
     "start_row": 2,
@@ -58,17 +58,17 @@ JOBS = [
 
     { # wastage report -> W.Inv #### ----------
     "key": "wastage report",
-    "df_cols": ['Location','Qty','Product Description','Remark'],
+    "df_cols": ['Location','Qty','Product Description','Remark','Date'],
     "sheet": "W.Inv",
-    "excel_cols": ['A','C','E','F'],
+    "excel_cols": ['A','C','E','F','K'],
     "start_row": 2,
     },
 
-    { # summary of sales by customer by item -> W.Inv 
+    { # summary of sales by customer by item
     "key": "summary of sales by customer by item",
-    "df_cols": ['Location','Qty','Description'],
+    "df_cols": ['Location','Qty','Description','Date'],
     "sheet": "W.Inv",
-    "excel_cols": ['A','C','E'],
+    "excel_cols": ['A','C','E','K'],
     "start_row": 2,
     },
 
@@ -91,12 +91,12 @@ JOBS = [
     { # programming summary inventory -> Unit Cost #### ----------
     "key": "programming summary inventory",
     "df_cols": ['Category','Group','Product Description','Qty I F','Unit','Pur Unit','Qty Pur','Inv Unit','Avg Cost'],
-    "sheet": "Ending",
+    "sheet": "Unit Cost",
     "excel_cols": ['A','B','C','D','E','F','G','H','I'],
     "start_row": 2,
     },
 
-    { #  -> requisition summary -> IN OUT ####----------
+    { # requisition summary -> IN OUT ####----------
     "key": "requisition summary",
     "df_cols": ['Product','From Location','From Branch','To Location','To Branch','Qty','Date'],
     "sheet": "IN OUT",
@@ -104,7 +104,7 @@ JOBS = [
     "start_row": 2,
     },
 
-    { #  -> requisition summary IB
+    { # requisition summary IB
     "key": "requisition summary IB",
     "df_cols": ['Product','From Location','From Branch','To Location','To Branch','Qty','Date'],
     "sheet": "IN OUT",
