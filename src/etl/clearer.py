@@ -25,5 +25,6 @@ def clear_all(
 
         wb.save()
         wb.close()
+
     finally:
         app.quit()

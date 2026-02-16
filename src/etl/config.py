@@ -44,7 +44,7 @@ JOBS = [
     "key": "purchase master report for all branches",
     "df_cols": ['Location', 'Product Description','Qty','Total','Supplier','Invoice','Purchase Date'],
     "sheet": "Purchase",
-    "excel_cols": ["A","c","d","I","J","K","L"],
+    "excel_cols": ["A","C","D","I","J","K","L"],
     "start_row": 2,
     },
 
