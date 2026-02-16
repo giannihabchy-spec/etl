@@ -65,6 +65,7 @@ def run_pipeline(base_folder: Path, mode: str = "all") -> None:
             cleaned,
             JOBS,
             clear_first=True,
+            suppress_warnings=True,
         )
     else:
         raise ValueError(f"Unsupported mode: {mode!r}")

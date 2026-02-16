@@ -7,6 +7,7 @@ def write_master(
     jobs: list[dict],
     output_path: str | None = None,
     clear_first: bool = False,
+    suppress_warnings: bool = False,
 ) -> None:
     if output_path is None:
         output_path = master_path
@@ -20,7 +21,8 @@ def write_master(
                 df = cleaned[job["key"]].copy()
                 sht = wb.sheets[job["sheet"]]
             except KeyError as e:
-                print(f"⚠ {job.get('key','?')} not available: {e}")
+                if not suppress_warnings:
+                    print(f"⚠ {job.get('key','?')} not available: {e}")
                 continue
 
             df_cols = list(job["df_cols"])
