@@ -9,6 +9,7 @@ from pathlib import Path
 from etl.config import JOBS
 from etl.orchestrator import clean_folder
 from etl.merger import merge
+from etl.strip_all import strip_all
 from etl.end_to_beg import end_to_beg
 from etl.clearer import clear_all
 from etl.writer import write_master
@@ -85,11 +86,12 @@ def run_pipeline(base_folder: Path, mode: str = "all") -> None:
 
     _step(f"▶ Using master workbook: {master_path.name}")
 
-    _step("① Cleaning raw files...")
+    _step("① Cleaning...")
     cleaned = clean_folder(base_folder)
 
-    _step("② Merging derived datasets...")
+    _step("② Merging...")
     cleaned = merge(cleaned)
+    cleaned = strip_all(cleaned)
 
     if mode == "all":
         _step("③ Copying 'Ending' sheet to 'Beg'...")
