@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import argparse
 import sys
-import threading
-import time
 from pathlib import Path
 
 from etl.config import JOBS
@@ -15,6 +13,9 @@ from etl.clearer import clear_all
 from etl.writer import write_master
 import warnings
 
+from rich.console import Console
+from rich.progress import Progress, SpinnerColumn, TextColumn
+
 
 warnings.filterwarnings(
     "ignore",
@@ -24,49 +25,30 @@ warnings.filterwarnings(
 
 
 class Spinner:
-    """Green dots moving in a square pattern."""
-    
-    GREEN = "\033[92m"
-    RESET = "\033[0m"
-    
-    PATTERNS = [
-        "● · · ·",  
-        "· ● · ·",  
-        "· · ● ·",  
-        "· · · ●",  
-    ]
-    
+
     def __init__(self, message: str = ""):
         self.message = message
-        self.pattern_idx = 0
-        self.running = False
-        self.thread = None
-    
-    def _spin(self):
-        while self.running:
-            pattern = self.PATTERNS[self.pattern_idx % len(self.PATTERNS)]
-            green_pattern = pattern.replace("●", f"{self.GREEN}●{self.RESET}")
-            sys.stdout.write(f"\r{self.message} {green_pattern}")
-            sys.stdout.flush()
-            self.pattern_idx += 1
-            time.sleep(0.2)
-    
+        self.console = Console(force_terminal=True, legacy_windows=True, width=120)
+        self._progress: Progress | None = None
+        self._task_id: int | None = None
+
     def __enter__(self):
-        self.running = True
-        self.thread = threading.Thread(target=self._spin, daemon=True)
-        self.thread.start()
+        self._progress = Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=self.console,
+        )
+        self._progress.start()
+        self._task_id = self._progress.add_task(self.message, total=None)
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.running = False
-        if self.thread:
-            self.thread.join(timeout=0.3)
-        sys.stdout.write("\r" + " " * (len(self.message) + 10) + "\r")
-        sys.stdout.flush()
+        if self._progress:
+            self._progress.stop()
+        return False
 
 
 def _step(msg: str) -> None:
-    """Print a simple, flush-immediate step message."""
     print(msg)
     sys.stdout.flush()
 
@@ -86,24 +68,19 @@ def run_pipeline(base_folder: Path, mode: str = "all") -> None:
 
     _step(f"▶ Using master workbook: {master_path.name}")
 
-    _step("① Cleaning...")
-    cleaned = clean_folder(base_folder)
-
-    _step("② Merging...")
-    cleaned = merge(cleaned)
-    cleaned = strip_all(cleaned)
+    with Spinner("   Cleaning..."):
+        cleaned = clean_folder(base_folder)
+        cleaned = merge(cleaned)
+        cleaned = strip_all(cleaned)
 
     if mode == "all":
-        _step("③ Copying 'Ending' sheet to 'Beg'...")
-        with Spinner("   Ending -> Beg"):
+        with Spinner("   Ending -> Beg..."):
             end_to_beg(str(master_path))
 
-        _step("④ Clearing...")
-        with Spinner("   Clearing "):
+        with Spinner("   Clearing... "):
             clear_all(str(master_path), JOBS)
 
-        _step("⑤ Writing...")
-        with Spinner("   Writing "):
+        with Spinner("   Writing... "):
             write_master(
                 str(master_path),
                 cleaned,
@@ -111,8 +88,7 @@ def run_pipeline(base_folder: Path, mode: str = "all") -> None:
                 clear_first=False,
             )
     elif mode == "not-all":
-        _step("③ Writing...")
-        with Spinner("   Writing "):
+        with Spinner("   Writing... "):
             write_master(
                 str(master_path),
                 cleaned,
@@ -129,7 +105,7 @@ def run_pipeline(base_folder: Path, mode: str = "all") -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
-            "Run the EKC ETL pipeline on a folder containing raw Excel files "
+            "Run the ETL pipeline on a folder containing raw Excel files "
             "and a master workbook named 'Auto Calc.xlsx'."
         )
     )
