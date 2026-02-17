@@ -22,7 +22,7 @@ def write_master(
                 sht = wb.sheets[job["sheet"]]
             except KeyError as e:
                 if not suppress_warnings:
-                    print(f"⚠ {job.get('key','?')} not available: {e}")
+                    print(f"⚠ {job.get('key','?')} not available")
                 continue
 
             df_cols = list(job["df_cols"])
