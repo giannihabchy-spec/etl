@@ -1,4 +1,5 @@
 import pandas as pd
+from etl.utils import make_columns_numeric
 
 
 def merge(cleaned: dict) -> dict:
@@ -23,9 +24,11 @@ def merge(cleaned: dict) -> dict:
              on = 'Check'
         )[cols]
         disc_by_item__disc_by_desc = disc_by_item__disc_by_desc[disc_by_item__disc_by_desc['Discount_Percentage'] > 0.95].copy()
-        cleaned["disc_by_item__disc_by_desc"] = disc_by_item__disc_by_desc
 
-        ids = cleaned["disc_by_item__disc_by_desc"].index
-        cleaned['discount by items'] = cleaned['discount by items'].drop(index=ids)
+        if disc_by_item__disc_by_desc.notna().any().any():
+
+            ids = disc_by_item__disc_by_desc.index
+            cleaned['disc_by_item__disc_by_desc'] = make_columns_numeric(disc_by_item__disc_by_desc,['QTY','Discount','Amount','Discount_Percentage'])
+            cleaned['discount by items'] = cleaned['discount by items'].drop(index=ids)
 
     return cleaned
