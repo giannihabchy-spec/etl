@@ -52,12 +52,18 @@ def clean_folder(folder: str | Path) -> dict[str, object]:
         raise NotADirectoryError(f"Folder not found or not a directory: {folder}")
 
     cleaned: dict[str, object] = {}
+    ib_files = [
+        p
+        for p in folder.iterdir()
+        if p.is_file() and _is_requisition_summary_ib_filename(p.name)
+    ]
+    multi_ib = len(ib_files) > 1
 
     for p in folder.iterdir():
         if not p.is_file():
             continue
 
-        if _is_requisition_summary_ib_filename(p.name):
+        if multi_ib and _is_requisition_summary_ib_filename(p.name):
             ib_index = (
                 sum(1 for k in cleaned.keys() if k.startswith("requisition summary IB "))
                 + 1
