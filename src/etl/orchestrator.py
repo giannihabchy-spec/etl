@@ -1,4 +1,6 @@
 from pathlib import Path
+import re
+
 import pandas as pd
 from etl.preprocessors import discount_by_category_by_department
 from etl.preprocessors import discount_by_description_by_employee
@@ -20,24 +22,28 @@ from etl.preprocessors import wastage_report
 
 
 cleaner_by_code = {
-    'REP_I_0022.xlsx': ('sales items ingredients' , sales_items_ingerdients.preprocess),
-    'REP_I_00023D_rows.xlsx': ('wastage report' , wastage_report.preprocess),
-    'REP_I_0024.xlsx': ('inventory production' , inventory_production.preprocess),
-    'REP_I_0033_rows.xlsx': ('inventory history' , inventory_history.preprocess),
-    'REP_I_0044.xlsx': ('programming summary inventory' , programming_summary_inventory.preprocess),
-    'REP_I_00074.xlsx': ('sales item wastage' , sales_item_wastage.preprocess),
-    'REP_I_0087.xlsx': ('requisition summary' , requisition_summary.preprocess),
-    'REP_I_0087_IB.xlsx': ('requisition summary IB',requisition_summary_IB.preprocess),
-    'REP_I_00268.xlsx': ('summary of sales by customer by item' , summary_of_sales_by_customer_by_item.preprocess),
-    'REP_I_00462.xlsx': ('purchase master report for all branches' , purchase_master_report_for_all_branches.preprocess),
-    'rep_s_00016.xlsx': ('discount by items' , discount_by_items.preprocess),
-    'rep_s_00161.xlsx': ('discount by category by department' , discount_by_category_by_department.preprocess),
-    'REP_S_00175.xlsx': ('sales item by transaction' , sales_item_by_transaction.preprocess),
-    'REP_S_00178.xlsx': ('programming summary sales' , programming_summary_sales.preprocess),
-    'rep_s_00191_rows.xlsx': ('sales by items' , sales_by_items.preprocess),
-    'rep_s_00438.xlsx': ('discount by description by employee' , discount_by_description_by_employee.preprocess)
+    "REP_I_0022.xlsx": ("sales items ingredients", sales_items_ingerdients.preprocess),
+    "REP_I_00023D_rows.xlsx": ("wastage report", wastage_report.preprocess),
+    "REP_I_0024.xlsx": ("inventory production", inventory_production.preprocess),
+    "REP_I_0033_rows.xlsx": ("inventory history", inventory_history.preprocess),
+    "REP_I_0044.xlsx": ("programming summary inventory", programming_summary_inventory.preprocess),
+    "REP_I_00074.xlsx": ("sales item wastage", sales_item_wastage.preprocess),
+    "REP_I_0087.xlsx": ("requisition summary", requisition_summary.preprocess),
+    "REP_I_0087_IB.xlsx": ("requisition summary IB",requisition_summary_IB.preprocess),
+    "REP_I_00268.xlsx": ("summary of sales by customer by item",summary_of_sales_by_customer_by_item.preprocess),
+    "REP_I_00462.xlsx": ("purchase master report for all branches",purchase_master_report_for_all_branches.preprocess),
+    "rep_s_00016.xlsx": ("discount by items", discount_by_items.preprocess),
+    "rep_s_00161.xlsx": ("discount by category by department",discount_by_category_by_department.preprocess),
+    "REP_S_00175.xlsx": ("sales item by transaction", sales_item_by_transaction.preprocess),
+    "REP_S_00178.xlsx": ("programming summary sales", programming_summary_sales.preprocess),
+    "rep_s_00191_rows.xlsx": ("sales by items", sales_by_items.preprocess),
+    "rep_s_00438.xlsx": ("discount by description by employee",discount_by_description_by_employee.preprocess),
 }
 
+
+def _is_requisition_summary_ib_filename(filename: str) -> bool:
+    """Match REP_I_0087_IB.xlsx and variants like REP_I_0087_IB (1).xlsx."""
+    return re.fullmatch(r"REP_I_0087_IB(?: \(\d+\))?\.xlsx", filename) is not None
 
 
 def clean_folder(folder: str | Path) -> dict[str, object]:
@@ -45,10 +51,34 @@ def clean_folder(folder: str | Path) -> dict[str, object]:
     if not folder.exists() or not folder.is_dir():
         raise NotADirectoryError(f"Folder not found or not a directory: {folder}")
 
-    cleaned = {}
+    cleaned: dict[str, object] = {}
 
     for p in folder.iterdir():
         if not p.is_file():
+            continue
+
+        if _is_requisition_summary_ib_filename(p.name):
+            ib_index = (
+                sum(1 for k in cleaned.keys() if k.startswith("requisition summary IB "))
+                + 1
+            )
+            output_name = f"requisition summary IB {ib_index}"
+            cleaner = requisition_summary_IB.preprocess
+
+            try:
+                result = cleaner(str(p))
+                cleaned[output_name] = result
+
+                if isinstance(result, pd.DataFrame):
+                    nan_cols = result.columns[result.isna().any()].tolist()
+                    if nan_cols:
+                        print(f"⚠ NaNs in {output_name}: {nan_cols}")
+
+                print(f"Cleaned {p.name} -> {output_name}")
+
+            except Exception as e:
+                print(f"Failed cleaning {p.name} -> {output_name}\n{e}")
+
             continue
 
         entry = cleaner_by_code.get(p.name)
