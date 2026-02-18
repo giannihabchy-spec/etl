@@ -33,7 +33,7 @@ cleaner_by_code = {
     'rep_s_00016.xlsx': ('discount by items' , discount_by_items.preprocess),
     'rep_s_00161.xlsx': ('discount by category by department' , discount_by_category_by_department.preprocess),
     'REP_S_00175.xlsx': ('sales item by transaction' , sales_item_by_transaction.preprocess),
-    'REP_S_00178.xlsx': ('programming summary sales' , programming_summary_sales_SP.preprocess),
+    'REP_S_00178.xlsx': ('programming summary sales' , programming_summary_sales.preprocess),
     'rep_s_00191_rows.xlsx': ('sales by items' , sales_by_items.preprocess),
     'rep_s_00438.xlsx': ('discount by description by employee' , discount_by_description_by_employee.preprocess)
 }

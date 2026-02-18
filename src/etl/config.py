@@ -2,9 +2,9 @@ JOBS = [
 
     { #  -> programming summary sales -> SP ####----------
     "key": "programming summary sales",
-    "df_cols": ['Description', 'Price'],
+    "df_cols": ['Description', 'Price','Category', 'Group'],
     "sheet": "SP",
-    "excel_cols": ['A','B'],
+    "excel_cols": ['A','B','C','D'],
     "start_row": 2,
     },
 
