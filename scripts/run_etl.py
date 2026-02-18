@@ -9,6 +9,7 @@ from etl.orchestrator import clean_folder
 from etl.merger import merge
 from etl.strip_all import strip_all
 from etl.special_characters import special_char
+from etl.reset_view import reset_workbook_view
 from etl.end_to_beg import end_to_beg
 from etl.clearer import clear_all
 from etl.writer import write_master
@@ -74,6 +75,9 @@ def run_pipeline(base_folder: Path, mode: str = "all") -> None:
         cleaned = merge(cleaned)
         cleaned = strip_all(cleaned)
         cleaned = special_char(cleaned)
+
+    with Spinner("   Resetting view..."):
+        reset_workbook_view(master_path)
 
     if mode == "all":
         with Spinner("   Ending -> Beg..."):
