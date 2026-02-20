@@ -26,3 +26,10 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find] 
 where = ["src"]
+
+[theme]
+base="dark"
+primaryColor="#ff4b4b"
+
+[layout]
+wideMode=true

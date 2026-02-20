@@ -22,14 +22,17 @@ warnings.filterwarnings(
     category=UserWarning,
 )
 
-st.set_page_config(page_title="Auto Calc Pipeline")
+st.set_page_config(
+    page_title="Auto Calc Pipeline",
+    layout="wide"
+)
 
 st.title("Auto Calc Pipeline")
 st.markdown("---")
 
 col1, col2 = st.columns(2)
 with col1:
-    folder_input = st.text_input("📁 Target Folder Path", placeholder="C:/Data/Project")
+    folder_input = st.text_input("📁 Target Folder Path", placeholder="C:/Path/To/Folder")
 with col2:
     mode = st.selectbox("⚙️ Mode", options=["all", "not-all"], index=0)
 

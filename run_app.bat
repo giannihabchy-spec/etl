@@ -1,4 +1,5 @@
 @echo off
 cd /d "%~dp0"
-uv run streamlit run gui.py --browser.gatherUsageStats false
+:: Force the theme to dark via the command line flag
+uv run streamlit run gui.py --theme.base="dark" --server.headless=true
 pause
