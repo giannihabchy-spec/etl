@@ -1,6 +1,8 @@
 Setup:
   uv sync
-  activate
+
+Requirements:
+  folder containg raw files + 'Auto Calc.xlsx'
   
 Run:
-  python scripts/run_etl.py "<path>"
+  uv run python scripts/run_etl.py 'folder_path'

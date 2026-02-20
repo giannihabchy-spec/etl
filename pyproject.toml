@@ -1,6 +1,10 @@
+[build-system] # for uv to install the package, not only dependencies
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
 [project]
 
-name = "pipeline"
+name = "ETL"
 
 version = "0.1.0"
 
