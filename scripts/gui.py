@@ -3,7 +3,6 @@ import sys
 from pathlib import Path
 import warnings
 
-sys.path.append(str(Path(__file__).parent / "src"))
 
 from etl.config import JOBS
 from etl.orchestrator import clean_folder
@@ -16,15 +15,29 @@ from etl.end_to_beg import end_to_beg
 from etl.clearer import clear_all
 from etl.writer import write_master
 
+st.set_page_config(
+    page_title="Auto Calc Pipeline",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+st.markdown("""
+    <style>
+        /* Force Dark Theme Vibe */
+        .stApp { background-color: #0e1117; color: #ffffff; }
+        /* Hide Streamlit branding for a "Desktop App" feel */
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+    </style>
+""", unsafe_allow_html=True)
+
+sys.path.append(str(Path(__file__).parent / "src"))
+
 warnings.filterwarnings(
     "ignore",
     message="Workbook contains no default style*",
     category=UserWarning,
-)
-
-st.set_page_config(
-    page_title="Auto Calc Pipeline",
-    layout="wide"
 )
 
 st.title("Auto Calc Pipeline")
