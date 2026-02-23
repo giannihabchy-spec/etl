@@ -3,6 +3,13 @@ import sys
 from pathlib import Path
 import warnings
 
+st.set_page_config(
+    page_title="Auto Calc Pipeline",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+sys.path.append(str(Path(__file__).parent / "src"))
 
 from etl.config import JOBS
 from etl.orchestrator import clean_folder
@@ -15,12 +22,6 @@ from etl.end_to_beg import end_to_beg
 from etl.clearer import clear_all
 from etl.writer import write_master
 
-st.set_page_config(
-    page_title="Auto Calc Pipeline",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
-
 st.markdown("""
     <style>
         /* Force Dark Theme Vibe */
@@ -31,8 +32,6 @@ st.markdown("""
         header {visibility: hidden;}
     </style>
 """, unsafe_allow_html=True)
-
-sys.path.append(str(Path(__file__).parent / "src"))
 
 warnings.filterwarnings(
     "ignore",
@@ -57,34 +56,42 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
     else:
         master_path = base_folder / "Auto Calc.xlsx"
         
-        # This creates the "Live Terminal" effect you wanted
-        with st.status("Initializing ETL...", expanded=True) as status:
-            
+        # --- BOX 1: INIT ---
+        with st.status("Initializing ETL...", expanded=True) as status_init:
             st.write(f"Folder: `{base_folder.name}`")
-            
-            st.write("Cleaning and Merging...")
-            cleaned = clean_folder(base_folder)
+            status_init.update(label="Initialization", state="complete", expanded=False)
+
+        # --- BOX 2: CLEANING ---
+        with st.status("Cleaning...", expanded=True) as status_clean:
+            cleaned = clean_folder(base_folder, log_func=st.write)
             cleaned = merge(cleaned)
             cleaned = strip_all(cleaned)
             cleaned = special_char(cleaned)
-            
-            st.write("Saving cleaned data...")
             save_cleaned_data(cleaned, base_folder)
+            st.write("Cleaned data is saved.")
+            status_clean.update(label="Cleaning", state="complete", expanded=False)
             
-            st.write("Resetting workbook view...")
-            reset_workbook_view(master_path)
-            
-            if mode == "all":
-                st.write("End -> Beg...")
+        # --- SUBSEQUENT BOXES ---
+        if mode == "all":
+            with st.status("End -> Beg...", expanded=True) as status_eb:
+                reset_workbook_view(master_path)
                 end_to_beg(str(master_path))
-                st.write("Clearing...")
+                st.write("Completed")
+                status_eb.update(label="End -> Beg", state="complete", expanded=False)
+
+            with st.status("Clearing...", expanded=True) as status_clear:
                 clear_all(str(master_path), JOBS)
-                st.write("Writing...")
-                write_master(str(master_path), cleaned, JOBS, clear_first=False)
-            else:
-                st.write("Writing...")
-                write_master(str(master_path), cleaned, JOBS, clear_first=True, suppress_warnings=True)
-            
-            status.update(label="✅ Pipeline Completed!", state="complete", expanded=False)
-        
-        st.success("Successfully updated 'Auto Calc.xlsx'")
+                st.write("Completed")
+                status_clear.update(label="Clearing", state="complete", expanded=False)
+
+            with st.status("Writing...", expanded=True) as status_write:    
+                write_master(str(master_path), cleaned, JOBS, clear_first=False, log_func=st.write)
+                status_write.update(label="Writing", state="complete", expanded=False)
+                st.write("Loaded all available data")
+        else:
+            with st.status("Writing...", expanded=True) as status_write:
+                write_master(str(master_path), cleaned, JOBS, clear_first=True, suppress_warnings=True, log_func=st.write)
+                status_write.update(label="Writing", state="complete", expanded=False)
+                st.write("Loaded all available data")           
+
+        st.success("✅ Successfully updated 'Auto Calc.xlsx'")
