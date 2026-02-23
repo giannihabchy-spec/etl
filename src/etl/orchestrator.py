@@ -46,7 +46,7 @@ def _is_requisition_summary_ib_filename(filename: str) -> bool:
     return re.fullmatch(r"REP_I_0087_IB(?: \(\d+\))?\.xlsx", filename) is not None
 
 
-def clean_folder(folder: str | Path) -> dict[str, object]:
+def clean_folder(folder: str | Path, log_func=print) -> dict[str, object]:
     folder = Path(folder)
     if not folder.exists() or not folder.is_dir():
         raise NotADirectoryError(f"Folder not found or not a directory: {folder}")
@@ -78,12 +78,12 @@ def clean_folder(folder: str | Path) -> dict[str, object]:
                 if isinstance(result, pd.DataFrame):
                     nan_cols = result.columns[result.isna().any()].tolist()
                     if nan_cols:
-                        print(f"⚠ NaNs in {output_name}: {nan_cols}")
+                        log_func(f"⚠ NaNs in {output_name}: {nan_cols}")
 
-                print(f"Cleaned {p.name} -> {output_name}")
+                log_func(f"Cleaned {p.name} -> {output_name}")
 
             except Exception as e:
-                print(f"Failed cleaning {p.name} -> {output_name}\n{e}")
+                log_func(f"Failed cleaning {p.name} -> {output_name}\n{e}")
 
             continue
 
@@ -100,11 +100,11 @@ def clean_folder(folder: str | Path) -> dict[str, object]:
             if isinstance(result, pd.DataFrame):
                 nan_cols = result.columns[result.isna().any()].tolist()
                 if nan_cols:
-                    print(f"⚠ NaNs in {output_name}: {nan_cols}")
+                    log_func(f"⚠ NaNs in {output_name}: {nan_cols}")
 
-            print(f"Cleaned {p.name} -> {output_name}")
+            log_func(f"Cleaned {p.name} -> {output_name}")
 
         except Exception as e:
-            print(f"Failed cleaning {p.name} -> {output_name}\n{e}")
+            log_func(f"Failed cleaning {p.name} -> {output_name}\n{e}")
 
     return cleaned
