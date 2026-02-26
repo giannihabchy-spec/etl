@@ -56,7 +56,7 @@ def _step(msg: str) -> None:
     sys.stdout.flush()
 
 
-def run_pipeline(base_folder: Path, mode: str = "all") -> None:
+def run_pipeline(base_folder: Path, mode: str = "all", source: str = "cloud") -> None:
 
     base_folder = base_folder.resolve()
 
@@ -64,6 +64,7 @@ def run_pipeline(base_folder: Path, mode: str = "all") -> None:
         raise NotADirectoryError(f"Folder not found or not a directory: {base_folder}")
 
     _step(f"▶ Using folder: {base_folder}")
+    _step(f"▶ Source: {source}")
 
     master_path = base_folder / "Auto Calc.xlsx"
     if not master_path.is_file():
@@ -72,7 +73,7 @@ def run_pipeline(base_folder: Path, mode: str = "all") -> None:
     _step(f"▶ Using master workbook: {master_path.name}")
 
     with Spinner("   Cleaning..."):
-        cleaned = clean_folder(base_folder)
+        cleaned = clean_folder(base_folder, source=source)
         cleaned = merge(cleaned)
         cleaned = strip_all(cleaned)
         cleaned = special_char(cleaned)
@@ -138,9 +139,16 @@ def main() -> None:
         ),
     )
 
+    parser.add_argument(
+        "--source",
+        choices=["cloud", "local"],
+        default="cloud",
+        help="Data source: 'cloud' (default) or 'local'. Selects which cleaners to use.",
+    )
+
     args = parser.parse_args()
 
-    run_pipeline(Path(args.folder), mode=args.mode)
+    run_pipeline(Path(args.folder), mode=args.mode, source=args.source)
 
 
 if __name__ == "__main__":

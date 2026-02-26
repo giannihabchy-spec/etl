@@ -42,11 +42,13 @@ warnings.filterwarnings(
 st.title("Auto Calc Pipeline")
 st.markdown("---")
 
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 with col1:
     folder_input = st.text_input("📁 Target Folder Path", placeholder="C:/Path/To/Folder")
 with col2:
     mode = st.selectbox("⚙️ Mode", options=["all", "not-all"], index=0)
+with col3:
+    source = st.selectbox("🔀 Source", options=["cloud", "local"], index=0)
 
 if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
     base_folder = Path(folder_input).resolve()
@@ -63,7 +65,7 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
 
         # --- BOX 2: CLEANING ---
         with st.status("Cleaning...", expanded=True) as status_clean:
-            cleaned = clean_folder(base_folder, log_func=st.write)
+            cleaned = clean_folder(base_folder, source=source, log_func=st.write)
             cleaned = merge(cleaned)
             cleaned = strip_all(cleaned)
             cleaned = special_char(cleaned)

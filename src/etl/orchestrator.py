@@ -1,24 +1,43 @@
 from pathlib import Path
 import re
+from typing import Literal
 
 import pandas as pd
-from etl.preprocessors import discount_by_category_by_department
-from etl.preprocessors import discount_by_description_by_employee
-from etl.preprocessors import discount_by_items
-from etl.preprocessors import inventory_history
-from etl.preprocessors import inventory_production
-from etl.preprocessors import programming_summary_inventory
-from etl.preprocessors import programming_summary_sales
-from etl.preprocessors import programming_summary_sales_SP
-from etl.preprocessors import purchase_master_report_for_all_branches
-from etl.preprocessors import requisition_summary
-from etl.preprocessors import requisition_summary_IB
-from etl.preprocessors import sales_by_items
-from etl.preprocessors import sales_item_by_transaction
-from etl.preprocessors import sales_item_wastage
-from etl.preprocessors import sales_items_ingerdients
-from etl.preprocessors import summary_of_sales_by_customer_by_item
-from etl.preprocessors import wastage_report
+
+from etl.preprocessors.cloud import discount_by_category_by_department
+from etl.preprocessors.cloud import discount_by_description_by_employee
+from etl.preprocessors.cloud import discount_by_items
+from etl.preprocessors.cloud import inventory_history
+from etl.preprocessors.cloud import inventory_production
+from etl.preprocessors.cloud import programming_summary_inventory
+from etl.preprocessors.cloud import programming_summary_sales
+from etl.preprocessors.cloud import purchase_master_report_for_all_branches
+from etl.preprocessors.cloud import requisition_summary
+from etl.preprocessors.cloud import requisition_summary_IB
+from etl.preprocessors.cloud import sales_by_items
+from etl.preprocessors.cloud import sales_item_by_transaction
+from etl.preprocessors.cloud import sales_item_wastage
+from etl.preprocessors.cloud import sales_items_ingerdients
+from etl.preprocessors.cloud import summary_of_sales_by_customer_by_item
+from etl.preprocessors.cloud import wastage_report
+
+from etl.preprocessors.local import list_sales_items
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+# from etl.preprocessors.local
+
+
 
 
 cleaner_by_code = {
@@ -43,7 +62,7 @@ cleaner_by_code = {
     },
 
     'local' : {
-
+        'rep_s_00188.xls': ('list sales items', list_sales_items.preprocess)
     }
 }
 
@@ -53,11 +72,14 @@ def _is_requisition_summary_ib_filename(filename: str) -> bool:
     return re.fullmatch(r"REP_I_0087_IB(?: \(\d+\))?\.xlsx", filename) is not None
 
 
-def clean_folder(folder: str | Path, log_func=print) -> dict[str, object]:
+def clean_folder(folder: str | Path, source: Literal["cloud", "local"] = "cloud", log_func=print) -> dict[str, object]:
     folder = Path(folder)
     if not folder.exists() or not folder.is_dir():
         raise NotADirectoryError(f"Folder not found or not a directory: {folder}")
+    if source not in cleaner_by_code:
+        raise ValueError(f"source must be 'cloud' or 'local', got {source!r}")
 
+    cleaners = cleaner_by_code[source]
     cleaned: dict[str, object] = {}
     ib_files = [
         p
@@ -94,7 +116,7 @@ def clean_folder(folder: str | Path, log_func=print) -> dict[str, object]:
 
             continue
 
-        entry = cleaner_by_code.get(p.name)
+        entry = cleaners.get(p.name)
         if entry is None:
             continue
 
