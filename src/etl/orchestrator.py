@@ -9,7 +9,7 @@ import etl.preprocessors.local as local
 
 cleaner_by_code = {
     'cloud' : {
-        "REP_I_0022.xlsx": ("sales items ingredients", cloud.sales_items_ingerdients.preprocess),
+        "REP_I_0022.xlsx": ("sales items ingredients", cloud.sales_items_ingredients.preprocess),
         "REP_I_00023D_rows.xlsx": ("wastage report", cloud.wastage_report.preprocess),
         "REP_I_0024.xlsx": ("inventory production", cloud.inventory_production.preprocess),
         "REP_I_0033_rows.xlsx": ("inventory history", cloud.inventory_history.preprocess),

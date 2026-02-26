@@ -11,6 +11,6 @@ from . import requisition_summary_IB
 from . import sales_by_items
 from . import sales_item_by_transaction
 from . import sales_item_wastage
-from . import sales_items_ingerdients
+from . import sales_items_ingredients
 from . import summary_of_sales_by_customer_by_item
 from . import wastage_report
