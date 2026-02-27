@@ -36,5 +36,6 @@ def preprocess(path):
     data = data.drop(['Product Code','Item Id'], axis = 1)    
     cols = ['Category','Group','Product Description','Qty I F','Unit','Pur Unit','Qty Pur','Inv Unit','Avg Cost']
     data = data[cols]
+    data = drop_na_by_name(data,['Unit'])
     data = make_columns_numeric(data,['Qty I F','Qty Pur','Avg Cost'])
     return data
