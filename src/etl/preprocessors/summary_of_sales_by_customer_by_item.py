@@ -4,19 +4,11 @@ from etl.utils import keep_cols_by_index
 from etl.utils import remove_repeated_headers
 from etl.utils import drop_na_by_name
 from etl.utils import make_columns_numeric
-import warnings
-
-warnings.filterwarnings(
-    "ignore",
-    message="Could not infer format*",
-    category=UserWarning,
-)
-
 
 
 def preprocess(path):
     data = read(path)
-    data = keep_cols_by_index(data,[0,3,4,13])
+    data = keep_cols_by_index(data,[0,1,2,7])
     data.columns = ['Product Code', 'Description', 'Qty', 'Total Price']
     id = data[data['Product Code'] == 'Product Code'].index[0] # Keep only the rows after the first Header
     data = data.iloc[id:].copy()
@@ -43,5 +35,6 @@ def preprocess(path):
 
     data = drop_na_by_name(data,['Description'])
     data = data.drop(columns='Product Code').copy()
+    data = drop_na_by_name(data,['Qty'])
     data = make_columns_numeric(data,['Qty','Total Price'])
     return data
