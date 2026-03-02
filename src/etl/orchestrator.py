@@ -29,13 +29,21 @@ cleaner_by_code = {
     },
 
     'local' : {
-        'rep_s_00188.xls': ('list sales items', local.list_sales_items.preprocess),
-        'rep_s_00016.xls': ('discount by items', local.discount_by_items.preprocess ),
+        'rep_s_00161.xls': ('discount by category', local.discount_by_category.preprocess),
         'rep_s_00438.xls': ('discount by description by employee', local.discount_by_description_by_server.preprocess),
         'rep_s_00513.xls': ('sales item by transaction', local.discount_by_invoive_by_details.preprocess),
-        'rep_s_00161.xls': ('discount by category', local.discount_by_category.preprocess),
+        'rep_s_00016.xls': ('discount by items', local.discount_by_items.preprocess ),
+        'rep_i_0033.xls': ('inventory history', local.inventory_history.preprocess),
+        'rep_i_0024.xls': ('inventory production', local.inventory_production.preprocess),
+        'rep_i_00268.xls': ('inventory / summary of sales by customer by items',local.inventory_summary_of_sales_by_customer_by_items.preprocess),
+        'rep_i_0023.xls': ('inventory wastage items', local.inventory_wastage_items.preprocess),
+        'rep_s_00188.xls': ('list sales items', local.list_sales_items.preprocess),
+        'rep_i_0044.xls': ('programming summary inventory', local.programming_summary_inventory.preprocess),
+        'rep_i_0051.xls': ('purchase with all details', local.purchase_with_all_details.preprocess),
+        'rep_i_0087.xls': ('requisition summary', local.requisition_summary.preprocess),
         'rep_s_00138.xls': ('sales by menu by items', local.sales_by_menu_by_items.preprocess),
-
+        'rep_i_00268_s.xls': ('sales / summary of sales by customer by items', local.sales_summary_of_sales_by_customer_by_items.preprocess),
+        'rep_i_0074.xls': ('sales wastage items', local.sales_wastage_items.preprocess),
     }
 }
 

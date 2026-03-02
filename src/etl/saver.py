@@ -8,6 +8,9 @@ _SHEET_NAME_MAP: dict[str, str] = {
     "purchase master report for all branches": "purchase master report",
     "discount by category by department": "disc by category by dep",
     "discount by description by employee": "disc by desc by employee",
+    "discount by description by employee": "disc by desc by server",
+    "inventory / summary of sales by customer by items": "inventory / summary of sales",
+    "sales / summary of sales by customer by items": "sales / summary of sales" 
 }
 
 
