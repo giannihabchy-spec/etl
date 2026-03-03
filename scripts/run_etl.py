@@ -4,7 +4,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from etl.config import JOBS
+from etl.config import get_jobs
 from etl.orchestrator import clean_folder
 from etl.merger import merge
 from etl.strip_all import strip_all
@@ -66,6 +66,8 @@ def run_pipeline(base_folder: Path, mode: str = "all", source: str = "cloud") ->
     _step(f"▶ Using folder: {base_folder}")
     _step(f"▶ Source: {source}")
 
+    jobs = get_jobs(source)
+
     master_path = base_folder / "Auto Calc.xlsx"
     if not master_path.is_file():
         raise FileNotFoundError(f"Master workbook not found at: {master_path}")
@@ -89,13 +91,13 @@ def run_pipeline(base_folder: Path, mode: str = "all", source: str = "cloud") ->
             end_to_beg(str(master_path))
 
         with Spinner("   Clearing... "):
-            clear_all(str(master_path), JOBS)
+            clear_all(str(master_path), jobs)
 
         with Spinner("   Writing... "):
             write_master(
                 str(master_path),
                 cleaned,
-                JOBS,
+                jobs,
                 clear_first=False,
             )
     elif mode == "not-all":
@@ -103,7 +105,7 @@ def run_pipeline(base_folder: Path, mode: str = "all", source: str = "cloud") ->
             write_master(
                 str(master_path),
                 cleaned,
-                JOBS,
+                jobs,
                 clear_first=True,
                 suppress_warnings=True,
             )

@@ -7,23 +7,14 @@ _SHEET_NAME_MAP: dict[str, str] = {
     "summary of sales by customer by item": "summary of sales",
     "purchase master report for all branches": "purchase master report",
     "discount by category by department": "disc by category by dep",
-    "discount by description by employee": "disc by desc by employee",
-    "discount by description by employee": "disc by desc by server",
-    "inventory / summary of sales by customer by items": "inventory / summary of sales",
-    "sales / summary of sales by customer by items": "sales / summary of sales" 
+    "discount by description by employee": "discount by description",
+    "inventory / summary of sales by customer by items": "inventory__summary of sales",
+    "sales / summary of sales by customer by items": "sales__summary of sales" 
 }
 
 
 def save_cleaned_data(cleaned: dict[str, object], raw_folder: str | Path) -> None:
-    """
-    Save each DataFrame in `cleaned` to a sheet in an Excel workbook.
-
-    The workbook is named 'Cleaned Data.xlsx' and is created in `raw_folder`,
-    which should be the folder containing all the raw data files.
-
-    Sheet names are the dataset names, except for any keys present in
-    `_SHEET_NAME_MAP`, in which case the mapped value is used.
-    """
+    
     folder_path = Path(raw_folder)
     if not folder_path.exists() or not folder_path.is_dir():
         raise NotADirectoryError(f"Folder not found or not a directory: {folder_path}")

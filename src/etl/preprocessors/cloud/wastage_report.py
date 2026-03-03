@@ -1,3 +1,5 @@
+# remove grouping + not list view
+
 import pandas as pd
 from etl.utils import read
 from etl.utils import keep_cols_by_index

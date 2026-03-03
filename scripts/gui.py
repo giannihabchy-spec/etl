@@ -11,7 +11,7 @@ st.set_page_config(
 
 sys.path.append(str(Path(__file__).parent / "src"))
 
-from etl.config import JOBS
+from etl.config import get_jobs
 from etl.orchestrator import clean_folder
 from etl.merger import merge
 from etl.strip_all import strip_all
@@ -52,7 +52,8 @@ with col3:
 
 if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
     base_folder = Path(folder_input).resolve()
-    
+    jobs = get_jobs(source)
+
     if not base_folder.is_dir():
         st.error(f"Error: '{base_folder}' is not a valid directory.")
     else:
@@ -82,17 +83,17 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
                 status_eb.update(label="End -> Beg", state="complete", expanded=False)
 
             with st.status("Clearing...", expanded=True) as status_clear:
-                clear_all(str(master_path), JOBS)
+                clear_all(str(master_path), jobs)
                 st.write("Completed")
                 status_clear.update(label="Clearing", state="complete", expanded=False)
 
             with st.status("Writing...", expanded=True) as status_write:    
-                write_master(str(master_path), cleaned, JOBS, clear_first=False, log_func=st.write)
+                write_master(str(master_path), cleaned, jobs, clear_first=False, log_func=st.write)
                 status_write.update(label="Writing", state="complete", expanded=False)
                 st.write("Loaded all available data")
         else:
             with st.status("Writing...", expanded=True) as status_write:
-                write_master(str(master_path), cleaned, JOBS, clear_first=True, suppress_warnings=True, log_func=st.write)
+                write_master(str(master_path), cleaned, jobs, clear_first=True, suppress_warnings=True, log_func=st.write)
                 status_write.update(label="Writing", state="complete", expanded=False)
                 st.write("Loaded all available data")           
 
