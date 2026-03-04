@@ -6,7 +6,7 @@ from etl.utils import make_columns_numeric
 
 def preprocess(path):
     data = read(path)
-    data = keep_cols_by_index(data,[0,3,4])
+    data = keep_cols_by_index(data,[0,2,3])
     data.columns = ['Check','Description','QTY']
     data = drop_na_by_name(data,['Description','QTY'])
     data = make_columns_numeric(data,['QTY'], er='coerce')
