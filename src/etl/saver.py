@@ -9,7 +9,8 @@ _SHEET_NAME_MAP: dict[str, str] = {
     "discount by category by department": "disc by category by dep",
     "discount by description by employee": "discount by description",
     "inventory / summary of sales by customer by items": "inventory__summary of sales",
-    "sales / summary of sales by customer by items": "sales__summary of sales" 
+    "sales / summary of sales by customer by items": "sales__summary of sales" ,
+    "discount by invoice with details": "discount by invoice"
 }
 
 

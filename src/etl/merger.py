@@ -5,14 +5,14 @@ from etl.utils import make_columns_numeric
 def merge(cleaned: dict) -> dict:
 
     disc_by_desc = cleaned.get("discount by description by employee")
-    sales_by_item = cleaned.get("sales item by transaction")
+    disc_by_invoice = cleaned.get("discount by invoice with details")
     disc_by_item = cleaned.get("discount by items")
     cols = ["Check", "Description", "QTY", "Discount", "Amount", "Discount_Percentage"]
 
-    if disc_by_desc is not None and sales_by_item is not None:
+    if disc_by_desc is not None and disc_by_invoice is not None:
         disc_by_desc_100 = disc_by_desc[disc_by_desc["Discount_Percentage"] > 0.95].copy()
-        cleaned["disc_by_desc__sales_by_item"] = disc_by_desc_100.merge(
-            sales_by_item,
+        cleaned["disc_by_desc__disc_by_invoice"] = disc_by_desc_100.merge(
+            disc_by_invoice,
             how="left",
             on="Check",
         )[cols]

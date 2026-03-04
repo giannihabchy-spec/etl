@@ -14,3 +14,4 @@ from . import sales_item_wastage
 from . import sales_items_ingredients
 from . import summary_of_sales_by_customer_by_item
 from . import wastage_report
+from . import discount_by_invoice_with_details

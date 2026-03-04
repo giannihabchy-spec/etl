@@ -21,7 +21,8 @@ cleaner_by_code = {
         "REP_I_00462.xlsx": ("purchase master report for all branches", cloud.purchase_master_report_for_all_branches.preprocess),
         "rep_s_00016.xlsx": ("discount by items", cloud.discount_by_items.preprocess),
         "rep_s_00161.xlsx": ("discount by category by department", cloud.discount_by_category_by_department.preprocess),
-        "REP_S_00175.xlsx": ("sales item by transaction", cloud.sales_item_by_transaction.preprocess),
+        # "REP_S_00175.xlsx": ("sales item by transaction", cloud.sales_item_by_transaction.preprocess),
+        'REP_S_00513.xlsx': ('discount by invoice with details', cloud.discount_by_invoice_with_details.preprocess),
         "REP_S_00178.xlsx": ("programming summary sales", cloud.programming_summary_sales.preprocess),
         "rep_s_00191_rows.xlsx": ("sales by items", cloud.sales_by_items.preprocess),
         "rep_s_00438.xlsx": ("discount by description by employee", cloud.discount_by_description_by_employee.preprocess),
@@ -31,7 +32,7 @@ cleaner_by_code = {
     'local' : {
         'rep_s_00161.xls': ('discount by category', local.discount_by_category.preprocess),
         'rep_s_00438.xls': ('discount by description by employee', local.discount_by_description_by_server.preprocess),
-        'rep_s_00513.xls': ('sales item by transaction', local.discount_by_invoive_by_details.preprocess),
+        'rep_s_00513.xls': ('discount by invoice with details', local.discount_by_invoive_by_details.preprocess),
         'rep_s_00016.xls': ('discount by items', local.discount_by_items.preprocess ),
         'rep_i_0033.xls': ('inventory history', local.inventory_history.preprocess),
         'rep_i_0024.xls': ('inventory production', local.inventory_production.preprocess),

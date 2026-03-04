@@ -25,7 +25,7 @@ JOBS_CLOUD = [
     },
 
     { # disc_by_desc__sales_by_item -> Discount #### ----------
-    "key": "disc_by_desc__sales_by_item",
+    "key": "disc_by_desc__disc_by_invoice",
     "df_cols": ['Description', 'QTY'],
     "sheet": "Discount",
     "excel_cols": ["A","B"],
