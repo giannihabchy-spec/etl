@@ -19,6 +19,7 @@ from etl.special_characters import special_char
 from etl.saver import save_cleaned_data
 from etl.reset_view import reset_workbook_view
 from etl.end_to_beg import end_to_beg
+from etl.prev_unit_cost import uc_pre_month
 from etl.clearer import clear_all
 from etl.writer import write_master
 
@@ -81,6 +82,11 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
                 end_to_beg(str(master_path))
                 st.write("Completed")
                 status_eb.update(label="End -> Beg", state="complete", expanded=False)
+
+            with st.status("UNIT COST -> UC PRE MONTH...", expanded=True) as status_eb:
+                uc_pre_month(str(master_path), log_func=st.write)
+                st.write("Completed")
+                status_eb.update(label="UNIT COST -> UC PRE MONTH", state="complete", expanded=False)
 
             with st.status("Clearing...", expanded=True) as status_clear:
                 clear_all(str(master_path), jobs)
