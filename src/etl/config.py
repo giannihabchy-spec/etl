@@ -144,7 +144,7 @@ JOBS_LOCAL = [
     },
 
     { # disc_by_desc__sales_by_item -> Discount #### ----------
-    "key": "disc_by_desc__sales_by_item",
+    "key": "disc_by_desc__disc_by_invoice",
     "df_cols": ['Description', 'QTY'],
     "sheet": "Discount",
     "excel_cols": ["A","B"],
@@ -193,7 +193,7 @@ JOBS_LOCAL = [
 
     { # sales / summary of sales by customer by items -> W.Sal #### ----------
     "key": "sales / summary of sales by customer by items",
-    "df_cols": ['Product Description', 'Qty','Total Price','Invoice','Customer','Date'],
+    "df_cols": ['Description', 'Qty','Total Price','Invoice','Customer','Date'],
     "sheet": "W.Sal",
     "excel_cols": ['A','B','J','K','L','M'],
     "start_row": 2,
