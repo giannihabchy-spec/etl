@@ -74,33 +74,42 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
             save_cleaned_data(cleaned, base_folder)
             st.write("Cleaned data is saved.")
             status_clean.update(label="Cleaning", state="complete", expanded=False)
-            
-        # --- SUBSEQUENT BOXES ---
-        if mode == "all":
-            with st.status("End -> Beg...", expanded=True) as status_eb:
-                reset_workbook_view(master_path)
-                end_to_beg(str(master_path))
-                st.write("Completed")
-                status_eb.update(label="End -> Beg", state="complete", expanded=False)
 
-            with st.status("UNIT COST -> UC PRE MONTH...", expanded=True) as status_eb:
-                uc_pre_month(str(master_path), log_func=st.write)
-                st.write("Completed")
-                status_eb.update(label="UNIT COST -> UC PRE MONTH", state="complete", expanded=False)
+        if not master_path.is_file():
+            with st.status("Opening Workbook...", expanded=True) as status_eb:
+                st.error("No 'Auto Calc.xlsx' file found in the folder.")
+                status_eb.update(state="error", expanded=False)
 
-            with st.status("Clearing...", expanded=True) as status_clear:
-                clear_all(str(master_path), jobs)
-                st.write("Completed")
-                status_clear.update(label="Clearing", state="complete", expanded=False)
+            st.success("✅ Successfully cleaned available data")
 
-            with st.status("Writing...", expanded=True) as status_write:    
-                write_master(str(master_path), cleaned, jobs, clear_first=False, log_func=st.write)
-                status_write.update(label="Writing", state="complete", expanded=False)
-                st.write("Loaded all available data")
         else:
-            with st.status("Writing...", expanded=True) as status_write:
-                write_master(str(master_path), cleaned, jobs, clear_first=True, suppress_warnings=True, log_func=st.write)
-                status_write.update(label="Writing", state="complete", expanded=False)
-                st.write("Loaded all available data")           
 
-        st.success("✅ Successfully updated 'Auto Calc.xlsx'")
+            # --- SUBSEQUENT BOXES ---
+            if mode == "all":
+                with st.status("End -> Beg...", expanded=True) as status_eb:
+                    reset_workbook_view(master_path)
+                    end_to_beg(str(master_path))
+                    st.write("Completed")
+                    status_eb.update(label="End -> Beg", state="complete", expanded=False)
+
+                with st.status("UNIT COST -> UC PRE MONTH...", expanded=True) as status_eb:
+                    uc_pre_month(str(master_path), log_func=st.write)
+                    st.write("Completed")
+                    status_eb.update(label="UNIT COST -> UC PRE MONTH", state="complete", expanded=False)
+
+                with st.status("Clearing...", expanded=True) as status_clear:
+                    clear_all(str(master_path), jobs)
+                    st.write("Completed")
+                    status_clear.update(label="Clearing", state="complete", expanded=False)
+
+                with st.status("Writing...", expanded=True) as status_write:    
+                    write_master(str(master_path), cleaned, jobs, clear_first=False, log_func=st.write)
+                    status_write.update(label="Writing", state="complete", expanded=False)
+                    st.write("Loaded all available data")
+            else:
+                with st.status("Writing...", expanded=True) as status_write:
+                    write_master(str(master_path), cleaned, jobs, clear_first=True, suppress_warnings=True, log_func=st.write)
+                    status_write.update(label="Writing", state="complete", expanded=False)
+                    st.write("Loaded all available data")           
+
+            st.success("✅ Successfully updated 'Auto Calc.xlsx'")
