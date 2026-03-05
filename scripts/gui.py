@@ -12,7 +12,7 @@ st.set_page_config(
 sys.path.append(str(Path(__file__).parent / "src"))
 
 from etl.config import get_jobs
-from etl.orchestrator import clean_folder
+from etl.orchestrator import clean_folder, cleaner_by_code
 from etl.merger import merge
 from etl.strip_all import strip_all
 from etl.special_characters import special_char
@@ -63,9 +63,18 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
         # --- BOX 1: INIT ---
         with st.status("Initializing ETL...", expanded=True) as status_init:
             st.write(f"Folder: `{base_folder.name}`")
-            status_init.update(label="Initialization", state="complete", expanded=False)
+            status_init.update(label="Initialization", state="complete", expanded=True)
 
-        # --- BOX 2: CLEANING ---
+        # --- BOX 2: PATTERNS ---
+        with st.status("Name Patterns", expanded=True) as status_pat:
+            lines = []
+            for i, j in cleaner_by_code[source].items():
+                lines.append(f"{j[0]} {'-'*((50-len(j[0]))-2)} {i}")
+
+            st.code("\n".join(lines), language=None)
+            status_pat.update(expanded=False)
+
+        # --- BOX 3: CLEANING ---
         with st.status("Cleaning...", expanded=True) as status_clean:
             cleaned = clean_folder(base_folder, source=source, log_func=st.write)
             cleaned = merge(cleaned)
@@ -73,12 +82,12 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
             cleaned = special_char(cleaned)
             save_cleaned_data(cleaned, base_folder)
             st.write("Cleaned data is saved.")
-            status_clean.update(label="Cleaning", state="complete", expanded=False)
+            status_clean.update(label="Cleaning", state="complete", expanded=True)
 
         if not master_path.is_file():
-            with st.status("Opening Workbook...", expanded=True) as status_eb:
+            with st.status("Opening Workbook...", expanded=True) as status_ow:
                 st.error("No 'Auto Calc.xlsx' file found in the folder.")
-                status_eb.update(state="error", expanded=False)
+                status_ow.update(label='Workbook not found',state="error", expanded=False)
 
             st.success("✅ Successfully cleaned available data")
 
@@ -90,26 +99,26 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
                     reset_workbook_view(master_path)
                     end_to_beg(str(master_path))
                     st.write("Completed")
-                    status_eb.update(label="End -> Beg", state="complete", expanded=False)
+                    status_eb.update(label="End -> Beg", state="complete", expanded=True)
 
-                with st.status("UNIT COST -> UC PRE MONTH...", expanded=True) as status_eb:
+                with st.status("UNIT COST -> UC PRE MONTH...", expanded=True) as status_uc:
                     uc_pre_month(str(master_path), log_func=st.write)
                     st.write("Completed")
-                    status_eb.update(label="UNIT COST -> UC PRE MONTH", state="complete", expanded=False)
+                    status_uc.update(label="UNIT COST -> UC PRE MONTH", state="complete", expanded=True)
 
                 with st.status("Clearing...", expanded=True) as status_clear:
                     clear_all(str(master_path), jobs)
                     st.write("Completed")
-                    status_clear.update(label="Clearing", state="complete", expanded=False)
+                    status_clear.update(label="Clearing", state="complete", expanded=True)
 
                 with st.status("Writing...", expanded=True) as status_write:    
                     write_master(str(master_path), cleaned, jobs, clear_first=False, log_func=st.write)
-                    status_write.update(label="Writing", state="complete", expanded=False)
+                    status_write.update(label="Writing", state="complete", expanded=True)
                     st.write("Loaded all available data")
             else:
                 with st.status("Writing...", expanded=True) as status_write:
                     write_master(str(master_path), cleaned, jobs, clear_first=True, suppress_warnings=True, log_func=st.write)
-                    status_write.update(label="Writing", state="complete", expanded=False)
+                    status_write.update(label="Writing", state="complete", expanded=True)
                     st.write("Loaded all available data")           
 
             st.success("✅ Successfully updated 'Auto Calc.xlsx'")
