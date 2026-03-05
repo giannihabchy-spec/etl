@@ -69,7 +69,7 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
         with st.status("Name Patterns", expanded=True) as status_pat:
             lines = []
             for i, j in cleaner_by_code[source].items():
-                lines.append(f"{j[0]} {'-'*((50-len(j[0]))-2)} {i}")
+                lines.append(f"{j[0]} {'-'*((70-len(j[0]))-2)} {i}")
 
             st.code("\n".join(lines), language=None)
             status_pat.update(expanded=False)
