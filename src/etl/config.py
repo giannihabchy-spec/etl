@@ -56,7 +56,15 @@ JOBS_CLOUD = [
     "start_row": 2,
     },
 
-    { # wastage report -> W.Inv #### ----------
+    { # summary of sales by customer by item -> W.Inv #### ----------
+    "key": "summary of sales by customer by item",
+    "df_cols": ['Location','Qty','Description','Date','Total Price','Invoice','Customer'],
+    "sheet": "W.Inv",
+    "excel_cols": ['A','C','E','K','M','N','O'],
+    "start_row": 2,
+    },
+
+    { # wastage report
     "key": "wastage report",
     "df_cols": ['Location','Qty','Product Description','Remark','Date'],
     "sheet": "W.Inv",
@@ -64,19 +72,11 @@ JOBS_CLOUD = [
     "start_row": 2,
     },
 
-    { # summary of sales by customer by item
-    "key": "summary of sales by customer by item",
-    "df_cols": ['Location','Qty','Description','Date'],
-    "sheet": "W.Inv",
-    "excel_cols": ['A','C','E','K'],
-    "start_row": 2,
-    },
-
     { # sales item wastage -> W.Sal #### ----------
     "key": "sales item wastage",
-    "df_cols": ['Product Description', 'Qty', 'Remark'],
+    "df_cols": ['Product Description', 'Qty', 'Remark','Date','Unit Cost'],
     "sheet": "W.Sal",
-    "excel_cols": ['A','B','F'],
+    "excel_cols": ['A','B','F','I','J'],
     "start_row": 2,
     },
 
@@ -175,7 +175,15 @@ JOBS_LOCAL = [
     "start_row": 2,
     },
 
-    { # inventory wastage items -> W.Inv #### ----------
+    { # inventory / summary of sales by customer by items -> W.Inv #### ----------
+    "key": "inventory / summary of sales by customer by items",
+    "df_cols": ['Location','Qty','Description','Date','Total Price','Invoice','Customer'],
+    "sheet": "W.Inv",
+    "excel_cols": ['A','C','E','K','M','N','O'],
+    "start_row": 2,
+    },
+
+    { # inventory wastage items
     "key": "inventory wastage items",
     "df_cols": ['Location','Qty','Product Description','Remark','Date'],
     "sheet": "W.Inv",
@@ -183,27 +191,19 @@ JOBS_LOCAL = [
     "start_row": 2,
     },
 
-    { # inventory / summary of sales by customer by items
-    "key": "inventory / summary of sales by customer by items",
-    "df_cols": ['Location','Qty','Description','Date'],
-    "sheet": "W.Inv",
-    "excel_cols": ['A','C','E','K'],
+    { # sales / summary of sales by customer by items -> W.Sal #### ----------
+    "key": "sales / summary of sales by customer by items",
+    "df_cols": ['Product Description', 'Qty','Total Price','Invoice','Customer','Date'],
+    "sheet": "W.Sal",
+    "excel_cols": ['A','B','J','K','L','M'],
     "start_row": 2,
     },
 
-    { # sales wastage items -> W.Sal #### ----------
+    { # sales wastage items
     "key": "sales wastage items",
     "df_cols": ['Product Description', 'Qty', 'Remark'],
     "sheet": "W.Sal",
     "excel_cols": ['A','B','F'],
-    "start_row": 2,
-    },
-
-    { # sales / summary of sales by customer by items
-    "key": "sales / summary of sales by customer by items",
-    "df_cols": ['Product Description', 'Qty'],
-    "sheet": "W.Sal",
-    "excel_cols": ['A','B'],
     "start_row": 2,
     },
 
