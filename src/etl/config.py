@@ -201,9 +201,9 @@ JOBS_LOCAL = [
 
     { # sales wastage items
     "key": "sales wastage items",
-    "df_cols": ['Product Description', 'Qty', 'Remark'],
+    "df_cols": ['Product Description', 'Qty', 'Remark','Date','Unit Cost'],
     "sheet": "W.Sal",
-    "excel_cols": ['A','B','F'],
+    "excel_cols": ['A','B','F','I','J'],
     "start_row": 2,
     },
 
