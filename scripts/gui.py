@@ -68,8 +68,10 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
         # --- BOX 2: PATTERNS ---
         with st.status("Name Patterns", expanded=True) as status_pat:
             lines = []
+            folder_files = [f.name for f in base_folder.iterdir() if f.is_file()]
             for i, j in cleaner_by_code[source].items():
-                lines.append(f"{j[0]} {'-'*((70-len(j[0]))-2)} {i}")
+                emoji = "✅" if any(i in f for f in folder_files) else "❌"
+                lines.append(f"{j[0]} {emoji} {'-'*((70-len(j[0]))-2)} {i}")
 
             st.code("\n".join(lines), language=None)
             status_pat.update(expanded=False)
