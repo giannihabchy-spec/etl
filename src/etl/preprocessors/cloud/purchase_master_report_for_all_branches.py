@@ -6,6 +6,7 @@ from etl.utils import keep_cols_by_index
 from etl.utils import drop_na_by_name
 from etl.utils import remove_repeated_headers
 from etl.utils import make_columns_date, make_columns_numeric
+from etl.utils import clean_check
 
 
 def preprocess(path):
@@ -18,4 +19,5 @@ def preprocess(path):
     data = remove_repeated_headers(data,'Location')
     data = make_columns_numeric(data,['Total','Qty'])
     data = make_columns_date(data,['Purchase Date'])
+    data = clean_check(data,['Invoice'])
     return data

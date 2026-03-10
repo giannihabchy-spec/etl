@@ -4,6 +4,7 @@ from etl.utils import remove_repeated_headers
 from etl.utils import drop_na_by_name
 from etl.utils import make_columns_numeric
 from etl.utils import make_columns_date
+from etl.utils import clean_check
 
 def preprocess(path):
     data = read(path)
@@ -25,6 +26,8 @@ def preprocess(path):
     inv_ids = data[data['Code'].str.contains('Invoice Number :', na = False)].index
     data.loc[inv_ids,'Invoice'] = data.loc[inv_ids,'Info']
     data['Invoice'] = data['Invoice'].ffill()
+    data = clean_check(data,['Invoice'])
+    
     data = data.drop(columns=['Info','Code'])
     data = data.dropna(how='any')
     data.columns = ['Description','Qty','Total Price','Customer','Location','Date','Invoice']

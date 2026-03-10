@@ -6,6 +6,7 @@ from etl.utils import drop_rows
 from etl.utils import drop_na_by_name
 from etl.utils import make_columns_date
 from etl.utils import make_columns_numeric
+from etl.utils import clean_check
 
 
 def preprocess(path):
@@ -27,6 +28,7 @@ def preprocess(path):
     inv_ids = data[data['A'].str.contains('Invoice Number:',na=False)].index
     data.loc[inv_ids,'Invoice'] = data.loc[inv_ids,'B']
     data['Invoice'] = data['Invoice'].ffill()
+    data = clean_check(data,['Invoice'])
 
     # Date
     date_ids = data[data['C'].str.contains('Purchase Date:',na=False)].index
