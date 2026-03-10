@@ -15,8 +15,9 @@ def excel_safe_cell(v):
 
     if isinstance(v, float) and (v == float("inf") or v == float("-inf")):
         return ""
-
+    
     if isinstance(v, str):
+        v = v.replace("*", "")
         s = v.lstrip()
         if s.startswith(("=", "+", "-", "@")) and not s.startswith("'"):
             return "'" + v
