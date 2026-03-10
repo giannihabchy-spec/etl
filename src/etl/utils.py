@@ -109,3 +109,22 @@ def drop_rows(data,col,value=r'\d{4}-\d{2}-\d{2}',date=False):
         return data[~data[real_col].astype(str).str.contains(value,regex=True,na=False)].copy()
     
     return data[data[real_col] != value].copy()
+
+
+def clean_check(data,cols):
+    if not isinstance(cols,list):
+        raise TypeError('cols must be a list of column names')
+    
+    original_norm = data.columns.str.strip().str.lower()
+    cols_norm = [c.strip().lower() for c in cols]
+
+    missing = [cols[i] for i,c in enumerate(cols_norm) if c not in original_norm]
+    if missing:
+        raise KeyError(f'Missing columns: {missing}')
+
+    ids = [original_norm.get_loc(c) for c in cols_norm]
+
+    for c in data.columns[ids]:
+        data[c] = pd.to_numeric(data[c].astype(str).str.replace(',', '', regex=False), errors='coerce').astype('Int64')
+
+    return data
