@@ -6,7 +6,6 @@ def write_master(
     cleaned: dict[str, pd.DataFrame],
     jobs: list[dict],
     output_path: str | None = None,
-    clear_first: bool = False,
     suppress_warnings: bool = False,
     log_func = print
 ) -> None:
@@ -41,23 +40,18 @@ def write_master(
 
             start_row = int(job["start_row"])
 
-            if clear_first:
-                write_row = start_row
-                for col in excel_cols:
-                    sht.range(f"{col}{start_row}:{col}{sht.cells.last_cell.row}").value = None
-            else:
-                last_row = start_row - 1
-                bottom = sht.cells.last_cell.row
+            last_row = start_row - 1
+            bottom = sht.cells.last_cell.row
 
-                for col in excel_cols:
-                    vals = sht.range(f"{col}{start_row}:{col}{bottom}").value
-                    if not vals:
-                        continue
-                    for i, v in enumerate(vals):
-                        if v not in (None, ""):
-                            last_row = max(last_row, start_row + i)
+            for col in excel_cols:
+                vals = sht.range(f"{col}{start_row}:{col}{bottom}").value
+                if not vals:
+                    continue
+                for i, v in enumerate(vals):
+                    if v not in (None, ""):
+                        last_row = max(last_row, start_row + i)
 
-                write_row = start_row if last_row < start_row else last_row + 1
+            write_row = start_row if last_row < start_row else last_row + 1
 
             for col_name, excel_col in zip(df_cols, excel_cols):
                 rng = f"{excel_col}{write_row}"

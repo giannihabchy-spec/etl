@@ -21,6 +21,7 @@ from etl.reset_view import reset_workbook_view
 from etl.end_to_beg import end_to_beg
 from etl.prev_unit_cost import uc_pre_month
 from etl.clearer import clear_all
+from etl.clear_sheets import clear_sheets
 from etl.writer import write_master
 
 st.markdown("""
@@ -114,12 +115,17 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
                     status_clear.update(label="Clearing", state="complete", expanded=True)
 
                 with st.status("Writing...", expanded=True) as status_write:    
-                    write_master(str(master_path), cleaned, jobs, clear_first=False, log_func=st.write)
+                    write_master(str(master_path), cleaned, jobs, log_func=st.write)
                     status_write.update(label="Writing", state="complete", expanded=True)
                     st.write("Loaded all available data")
             else:
+                with st.status("Clearing...", expanded=True) as status_clear:
+                    clear_sheets(str(master_path), jobs=jobs, cleaned=cleaned, log_func=st.write)
+                    st.write("Completed")
+                    status_clear.update(label="Clearing", state="complete", expanded=True)
+
                 with st.status("Writing...", expanded=True) as status_write:
-                    write_master(str(master_path), cleaned, jobs, clear_first=True, suppress_warnings=True, log_func=st.write)
+                    write_master(str(master_path), cleaned, jobs, suppress_warnings=True, log_func=st.write)
                     status_write.update(label="Writing", state="complete", expanded=True)
                     st.write("Loaded all available data")           
 

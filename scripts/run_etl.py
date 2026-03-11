@@ -14,6 +14,7 @@ from etl.reset_view import reset_workbook_view
 from etl.end_to_beg import end_to_beg
 from etl.prev_unit_cost import uc_pre_month
 from etl.clearer import clear_all
+from etl.clear_sheets import clear_sheets
 from etl.writer import write_master
 import warnings
 
@@ -102,15 +103,17 @@ def run_pipeline(base_folder: Path, mode: str = "all", source: str = "cloud") ->
                 str(master_path),
                 cleaned,
                 jobs,
-                clear_first=False,
             )
+            
     elif mode == "not-all":
+        with Spinner("   Clearing... "):
+            clear_sheets(str(master_path), jobs=jobs, cleaned=cleaned)
+
         with Spinner("   Writing... "):
             write_master(
                 str(master_path),
                 cleaned,
                 jobs,
-                clear_first=True,
                 suppress_warnings=True,
             )
     else:
