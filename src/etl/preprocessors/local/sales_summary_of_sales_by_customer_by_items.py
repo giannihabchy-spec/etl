@@ -29,4 +29,5 @@ def preprocess(path):
     data.columns = ['Description','Qty','Total Price','Customer','Location','Date','Invoice']
     data = make_columns_numeric(data,['Qty','Total Price'])
     data = make_columns_date(data,['Date'])
+    data['Remark'] = 'sales'
     return data
