@@ -193,9 +193,9 @@ JOBS_LOCAL = [
 
     { # sales / summary of sales by customer by items -> W.Sal #### ----------
     "key": "sales / summary of sales by customer by items",
-    "df_cols": ['Description', 'Qty','Total Price','Invoice','Customer','Date'],
+    "df_cols": ['Description', 'Qty', 'Remark','Date','Total Price','Invoice','Customer'],
     "sheet": "W.Sal",
-    "excel_cols": ['A','B','J','K','L','M'],
+    "excel_cols": ['A','B','F','I','K','L','M'],
     "start_row": 2,
     },
 
