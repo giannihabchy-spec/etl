@@ -38,4 +38,5 @@ def preprocess(path):
     data = make_columns_numeric(data,['Qty','Total Price'])
     cols = ['Description','Qty','Total Price','Customer','Location','Date','Invoice']
     data = data[cols].copy()
+    data['Remark'] = 'sales'
     return data

@@ -36,4 +36,5 @@ def preprocess(path):
     data = data.drop(columns='Product Code').copy()
     data = drop_na_by_name(data,['Qty'])
     data = make_columns_numeric(data,['Qty','Total Price'])
+    data['Remark'] = 'sales'
     return data
