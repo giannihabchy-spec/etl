@@ -93,7 +93,7 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
             cleaned = clean_folder(base_folder, source=source, log_func=st.write)
 
             if not cleaned:
-                st.error("No recognized files found in the folder")
+                st.error("Make sure the selected source is correct")
                 status_clean.update(label='Empty folder',state="error", expanded=True)
                 st.stop()
 
