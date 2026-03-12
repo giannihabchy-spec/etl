@@ -91,6 +91,12 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
         # --- BOX 3: CLEANING ---
         with st.status("Cleaning...", expanded=True) as status_clean:
             cleaned = clean_folder(base_folder, source=source, log_func=st.write)
+
+            if not cleaned:
+                st.error("No recognized files found in the folder")
+                status_clean.update(label='Empty folder',state="error", expanded=True)
+                st.stop()
+
             cleaned = merge(cleaned)
             cleaned = strip_all(cleaned)
             cleaned = special_char(cleaned)
