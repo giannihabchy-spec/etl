@@ -58,9 +58,9 @@ JOBS_CLOUD = [
 
     { # summary of sales by customer by item -> W.Inv #### ----------
     "key": "summary of sales by customer by item",
-    "df_cols": ['Location','Qty','Description','Date','Total Price','Invoice','Customer'],
+    "df_cols": ['Location','Qty','Description','Remark','Date','Total Price','Invoice','Customer'],
     "sheet": "W.Inv",
-    "excel_cols": ['A','C','E','K','M','N','O'],
+    "excel_cols": ['A','C','E','F','K','L','M','N'],
     "start_row": 2,
     },
 
@@ -177,9 +177,9 @@ JOBS_LOCAL = [
 
     { # inventory / summary of sales by customer by items -> W.Inv #### ----------
     "key": "inventory / summary of sales by customer by items",
-    "df_cols": ['Location','Qty','Description','Date','Total Price','Invoice','Customer'],
+    "df_cols": ['Location','Qty','Description','Remark','Date','Total Price','Invoice','Customer'],
     "sheet": "W.Inv",
-    "excel_cols": ['A','C','E','K','M','N','O'],
+    "excel_cols": ['A','C','E','F','K','L','M','N'],
     "start_row": 2,
     },
 
