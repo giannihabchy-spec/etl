@@ -53,6 +53,17 @@ with col3:
     source = st.selectbox("🔀 Source", options=["cloud", "local"], index=0)
 
 if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
+    
+    if folder_input.strip() =='':
+        with st.status("Name Patterns", expanded=True) as status_pat_0:
+            lines = []
+            for i, j in cleaner_by_code[source].items():
+                lines.append(f"{j[0]} {'-'*((70-len(j[0]))-2)} {i}")
+                
+            st.code("\n".join(lines), language=None)
+            status_pat_0.update(state="complete",expanded=True)
+            st.stop()
+    
     base_folder = Path(folder_input).resolve()
     jobs = get_jobs(source)
 
