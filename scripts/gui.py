@@ -26,9 +26,6 @@ from etl.writer import write_master
 
 st.markdown("""
     <style>
-        /* Force Dark Theme Vibe */
-        .stApp { background-color: #0e1117; color: #ffffff; }
-        /* Hide Streamlit branding for a "Desktop App" feel */
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
