@@ -30,6 +30,7 @@ cleaner_by_code = {
     },
 
     'local' : {
+        "rep_i_0022.xls": ("sales items ingredients", local.sales_items_ingredients.preprocess),
         'rep_s_00161.xls': ('discount by category', local.discount_by_category.preprocess),
         'rep_s_00438.xls': ('discount by description by employee', local.discount_by_description_by_server.preprocess),
         'rep_s_00513.xls': ('discount by invoice with details', local.discount_by_invoive_by_details.preprocess),

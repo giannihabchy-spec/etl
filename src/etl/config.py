@@ -110,6 +110,14 @@ JOBS_CLOUD = [
     "sheet": "IN OUT",
     "excel_cols": ['A','B','C','D','E','F','J'],
     "start_row": 2,
+    },
+
+    { # sales items ingredients -> Recipes ####----------
+    "key": "sales items ingredients",
+    "df_cols": ['Item','Ingredient','Qty'],
+    "sheet": "Recipes",
+    "excel_cols": ['C','D','E'],
+    "start_row": 2,
     }
 
 ]
@@ -230,6 +238,15 @@ JOBS_LOCAL = [
     "excel_cols": ['A','B','C','D','E','F','J'],
     "start_row": 2,
     },
+
+    { # sales items ingredients -> Recipes ####----------
+    "key": "sales items ingredients",
+    "df_cols": ['Item','Ingredient','Qty'],
+    "sheet": "Recipes",
+    "excel_cols": ['C','D','E'],
+    "start_row": 2,
+    }
+
 
 ]
 
