@@ -118,6 +118,14 @@ JOBS_CLOUD = [
     "sheet": "Recipes",
     "excel_cols": ['C','D','E'],
     "start_row": 2,
+    },
+
+    { # inventory items ingredients -> sub recipes ####----------
+    "key": "inventory items ingredients",
+    "df_cols": ['Production Name', 'Product Description', 'Qty','Qty to be Prepared', 'Prepared Unit'],
+    "sheet": "sub recipes",
+    "excel_cols": ['B','C','D','H','I'],
+    "start_row": 2,
     }
 
 ]
@@ -244,6 +252,14 @@ JOBS_LOCAL = [
     "df_cols": ['Item','Ingredient','Qty'],
     "sheet": "Recipes",
     "excel_cols": ['C','D','E'],
+    "start_row": 2,
+    },
+
+    { # inventory items ingredients -> sub recipes ####----------
+    "key": "inventory items ingredients",
+    "df_cols": ['Production Name', 'Product Description', 'Qty','Qty to be Prepared', 'Prepared Unit'],
+    "sheet": "sub recipes",
+    "excel_cols": ['B','C','D','H','I'],
     "start_row": 2,
     }
 

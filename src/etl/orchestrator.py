@@ -10,6 +10,7 @@ import etl.preprocessors.local as local
 cleaner_by_code = {
     'cloud' : {
         "REP_I_0022.xlsx": ("sales items ingredients", cloud.sales_items_ingredients.preprocess),
+        "REP_I_00201.xlsx": ("inventory items ingredients", cloud.inventory_items_ingredients_qtp.preprocess),
         "REP_I_00023D_rows.xlsx": ("wastage report", cloud.wastage_report.preprocess),
         "REP_I_0024.xlsx": ("inventory production", cloud.inventory_production.preprocess),
         "REP_I_0033_rows.xlsx": ("inventory history", cloud.inventory_history.preprocess),
@@ -31,6 +32,7 @@ cleaner_by_code = {
 
     'local' : {
         "rep_i_0022.xls": ("sales items ingredients", local.sales_items_ingredients.preprocess),
+        "rep_i_00201.xls": ("inventory items ingredients", local.inventory_items_ingredients_qtp.preprocess),
         'rep_s_00161.xls': ('discount by category', local.discount_by_category.preprocess),
         'rep_s_00438.xls': ('discount by description by employee', local.discount_by_description_by_server.preprocess),
         'rep_s_00513.xls': ('discount by invoice with details', local.discount_by_invoive_by_details.preprocess),
