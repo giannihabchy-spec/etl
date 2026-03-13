@@ -16,13 +16,11 @@ def preprocess(path):
     data = remove_repeated_headers(data,'Product Code')
     data = drop_rows(data,'Product Code','Price Level 1')
     data = drop_rows(data,'Product Code',date=True)
-
-    # Clearing 'Product Code' where 'Product Description' exist
     ids = data[~data['Product Description'].isna()].index
     data.loc[ids,'Product Code'] = pd.NA
-    # Shift cells up for desc and qty
     data[['Product Description','Qty']] = data[['Product Description','Qty']].shift(-1)
     data['Product Code'] = data['Product Code'].ffill()
     data = drop_na_by_name(data,['Qty'])
     data = make_columns_numeric(data,['Qty'])
+    data.columns = ['Item', 'Ingredient', 'Qty']
     return data
