@@ -25,7 +25,7 @@ def write_master(
                     log_func(f"⚠ {job.get('key','?')} not available")
                 continue
 
-            log_func(f"{job.get("key")} --> {job.get("sheet")}")
+            log_func(f"{job.get("key")} -> {job.get("sheet")}")
 
             df_cols = list(job["df_cols"])
             excel_cols = list(job["excel_cols"])

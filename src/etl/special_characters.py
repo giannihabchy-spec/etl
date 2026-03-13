@@ -17,7 +17,7 @@ def excel_safe_cell(v):
         return ""
     
     if isinstance(v, str):
-        v = v.replace("*", "")
+        v = v.lstrip("*")
         s = v.lstrip()
         if s.startswith(("=", "+", "-", "@")) and not s.startswith("'"):
             return "'" + v
