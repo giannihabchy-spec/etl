@@ -124,7 +124,7 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
                     status_uc.update(label="UNIT COST -> UC PRE MONTH", state="complete", expanded=True)
 
                 with st.status("Clearing...", expanded=True) as status_clear:
-                    clear_all(str(master_path), jobs)
+                    clear_all(str(master_path), jobs, cleaned=cleaned)
                     st.write("Completed")
                     status_clear.update(label="Clearing", state="complete", expanded=True)
 
