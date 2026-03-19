@@ -14,13 +14,13 @@ _SHEET_NAME_MAP: dict[str, str] = {
 }
 
 
-def save_cleaned_data(cleaned: dict[str, object], raw_folder: str | Path) -> None:
+def save_cleaned_data(cleaned: dict[str, object], raw_folder: str | Path, result_name: str = 'Cleaned Data.xlsx') -> None:
     
     folder_path = Path(raw_folder)
     if not folder_path.exists() or not folder_path.is_dir():
         raise NotADirectoryError(f"Folder not found or not a directory: {folder_path}")
 
-    workbook_path = folder_path / "Cleaned Data.xlsx"
+    workbook_path = folder_path / result_name
 
     with pd.ExcelWriter(workbook_path, engine="openpyxl") as writer:
         for name, value in cleaned.items():
