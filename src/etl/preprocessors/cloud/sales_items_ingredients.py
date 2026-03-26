@@ -19,8 +19,9 @@ def preprocess(path):
     ids = data[~data['Product Description'].isna()].index
     data.loc[ids,'Product Code'] = pd.NA
     data[['Product Description','Qty']] = data[['Product Description','Qty']].shift(-1)
-    data['Product Code'] = data['Product Code'].ffill()
+    data = drop_na_by_name(data,['Product Description'])
     data = drop_na_by_name(data,['Qty'])
+    data['Product Code'] = data['Product Code'].ffill()
     data = make_columns_numeric(data,['Qty'])
     data.columns = ['Item', 'Ingredient', 'Qty']
     return data
