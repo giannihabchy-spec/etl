@@ -37,7 +37,7 @@ def preprocess(path):
     data = drop_na_by_name(data,['D'])
     data = drop_na_by_name(data,['Location'])
     data.columns = ['Product Description', 'B', 'Qty', 'D', 'Total', 'Location', 'Supplier', 'Invoice', 'Purchase Date']
-    cols = ['Location', 'Product Description', 'Total', 'Supplier', 'Invoice', 'Qty', 'Purchase Date']
+    cols = ['Location', 'Product Description', 'Qty', 'Total', 'Supplier', 'Invoice', 'Purchase Date']
     data = data[cols].copy()
     data = make_columns_date(data,['Purchase Date'])
     data = make_columns_numeric(data,['Total','Qty'])
