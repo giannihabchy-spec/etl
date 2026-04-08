@@ -235,7 +235,7 @@ JOBS_LOCAL = [
     "key": "programming summary inventory",
     "df_cols": ['Category','Group','Product Description','Qty I F','Unit','Pur Unit','Qty Pur','Inv Unit','Avg Cost'],
     "sheet": "Unit Cost",
-    "excel_cols": ['A','B','C','D','E','F','G','H','I'],
+    "excel_cols": ['A','B','C','D','E','F','G','H','J'],
     "start_row": 2,
     },
 
