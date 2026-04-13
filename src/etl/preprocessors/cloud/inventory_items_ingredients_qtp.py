@@ -8,11 +8,11 @@ from etl.utils import make_columns_numeric
 def preprocess(path):
     data = read(path)
     data = keep_cols_by_index(data,[1,2,4])
-    data.columns = ['Production Name', 'Product Description', 'Qty']
-    ids = data[data['Production Name'].notna()].index
-    data.loc[ids,'Production Name'] = data.loc[ids,'Production Name'].str.replace('Product Code: ','',regex=False)
-    data['Production Name'] = data['Production Name'].ffill()
+    data.columns = ['Name', 'Product Description', 'Qty']
+    ids = data[data['Name'].notna()].index
     data.loc[ids,'Qty'] = data.loc[ids,'Qty'].str.replace('Ingredients to prepare ','',regex=False)
+    data.loc[ids,'Production Name'] = data.loc[ids,'Qty'].str.split().apply(lambda x: ' '.join(x[3:]))
+    data['Production Name'] = data['Production Name'].ffill()
     data.loc[ids,'to prepare'] = data.loc[ids,'Qty'].str.split().apply(lambda x: x[:2])
     data.loc[ids,'Qty to be Prepared'] = data.loc[ids,'to prepare'].apply(lambda x: x[0])
     data.loc[ids,'Prepared Unit'] = data.loc[ids,'to prepare'].apply(lambda x: x[1])
