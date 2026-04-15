@@ -12,16 +12,17 @@ from etl.utils import make_columns_numeric
 def preprocess(path):
     data = read(path)
     data = keep_cols_by_index(data,[0,1,3])
-    data.columns = ['Product Code', 'Product Description', 'Qty']
-    data = remove_repeated_headers(data,'Product Code')
-    data = drop_rows(data,'Product Code','Price Level 1')
-    data = drop_rows(data,'Product Code',date=True)
-    ids = data[~data['Product Description'].isna()].index
-    data.loc[ids,'Product Code'] = pd.NA
-    data[['Product Description','Qty']] = data[['Product Description','Qty']].shift(-1)
-    data = drop_na_by_name(data,['Product Description'])
-    data = drop_na_by_name(data,['Qty'])
-    data['Product Code'] = data['Product Code'].ffill()
-    data = make_columns_numeric(data,['Qty'])
+    data.columns = ['code','desc','qty']
+    data = drop_rows(data, 'code', value = 'Product Code')
+    data = drop_rows(data, 'code', date = True)
+    data = data.reset_index(drop=True)
+    ids = data[data['code'] == 'Price Level 1'].index - 1
+    data.loc[ids]
+    data.loc[ids,'item'] = data.loc[ids,'code']
+    data['item'] = data['item'].ffill()
+    data = drop_na_by_name(data, ['qty'])
+    data = make_columns_numeric(data, ['qty'])
+    cols = ['item','desc','qty']
+    data = data[cols]
     data.columns = ['Item', 'Ingredient', 'Qty']
     return data
