@@ -27,6 +27,7 @@ cleaner_by_code = {
         "REP_S_00178.xlsx": ("programming summary sales", cloud.programming_summary_sales.preprocess),
         "rep_s_00191_rows.xlsx": ("sales by items", cloud.sales_by_items.preprocess),
         "rep_s_00438.xlsx": ("discount by description by employee", cloud.discount_by_description_by_employee.preprocess),
+        "rep_hs_0006.xlsx": ("sales by category", cloud.sales_by_category.preprocess)
 
     },
 
@@ -48,6 +49,7 @@ cleaner_by_code = {
         'rep_s_00138.xls': ('sales by menu by items', local.sales_by_menu_by_items.preprocess),
         'rep_i_00268_s.xls': ('sales / summary of sales by customer by items', local.sales_summary_of_sales_by_customer_by_items.preprocess),
         'rep_i_0074.xls': ('sales wastage items', local.sales_wastage_items.preprocess),
+        "rep_s_00135.xls": ("sales by category", local.sales_by_category.preprocess)
     }
 }
 

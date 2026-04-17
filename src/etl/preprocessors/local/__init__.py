@@ -15,3 +15,4 @@ from . import sales_summary_of_sales_by_customer_by_items
 from . import sales_wastage_items
 from . import sales_items_ingredients
 from . import inventory_items_ingredients_qtp
+from . import sales_by_category
