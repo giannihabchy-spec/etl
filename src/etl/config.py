@@ -74,9 +74,9 @@ JOBS_CLOUD = [
 
     { # sales item wastage -> W.Sal #### ----------
     "key": "sales item wastage",
-    "df_cols": ['Product Description', 'Qty', 'Remark','Date','Unit Cost'],
+    "df_cols": ['Product Description', 'Qty', 'Remark','Date'],
     "sheet": "W.Sal",
-    "excel_cols": ['A','B','F','I','J'],
+    "excel_cols": ['A','B','F','I'],
     "start_row": 2,
     },
 
@@ -217,9 +217,9 @@ JOBS_LOCAL = [
 
     { # sales wastage items
     "key": "sales wastage items",
-    "df_cols": ['Product Description', 'Qty', 'Remark','Date','Unit Cost'],
+    "df_cols": ['Product Description', 'Qty', 'Remark','Date'],
     "sheet": "W.Sal",
-    "excel_cols": ['A','B','F','I','J'],
+    "excel_cols": ['A','B','F','I'],
     "start_row": 2,
     },
 
