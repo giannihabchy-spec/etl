@@ -8,33 +8,33 @@ from etl.utils import make_columns_numeric
 def preprocess(path):
     data = read(path)
     data = keep_cols_by_index(data,[0,1,2,7])
-    data.columns = ['Product Code', 'Description', 'Qty', 'Total Price']
-    id = data[data['Product Code'] == 'Product Code'].index[0] # Keep only the rows after the first Header
+    data.columns = ['product code', 'product description', 'qty', 'sales revenue']
+    id = data[data['product code'] == 'Product Code'].index[0] # Keep only the rows after the first Header
     data = data.iloc[id:].copy()
-    data = remove_repeated_headers(data,'Product Code')
+    data = remove_repeated_headers(data,'product code')
 
-    # Create 'Customer' from 'Product Code'
-    cust_ids = data[data['Product Code'].str.contains('Customer Name: ',na=False)].index
-    data.loc[cust_ids,'Customer'] = data.loc[cust_ids,'Product Code'].str.replace('Customer Name: ','',regex = False)
-    data['Customer'] = data['Customer'].ffill()
+    # Create 'customer' from 'product code'
+    cust_ids = data[data['product code'].str.contains('Customer Name: ',na=False)].index
+    data.loc[cust_ids,'customer'] = data.loc[cust_ids,'product code'].str.replace('Customer Name: ','',regex = False)
+    data['customer'] = data['customer'].ffill()
 
-    # Create 'Location' from 'Product Code'
-    loc_ids = data[data['Product Code'].str.contains('Location: ',na=False)].index
-    data.loc[loc_ids,'Location'] = data.loc[loc_ids,'Product Code'].str.replace('Location: ','',regex = False)
-    data['Location'] = data['Location'].ffill()
+    # Create 'location' from 'product code'
+    loc_ids = data[data['product code'].str.contains('Location: ',na=False)].index
+    data.loc[loc_ids,'location'] = data.loc[loc_ids,'product code'].str.replace('Location: ','',regex = False)
+    data['location'] = data['location'].ffill()
 
-    # 'Date' is 'Product Code' converted to type date
-    data['Date'] = pd.to_datetime(data['Product Code'],errors='coerce').dt.date
-    data['Date'] = data['Date'].ffill()
+    # 'date' is 'product code' converted to type date
+    data['date'] = pd.to_datetime(data['product code'],errors='coerce').dt.date
+    data['date'] = data['date'].ffill()
 
-    # Create 'Invoice' from 'Product Code'
-    inv_ids = data[data['Product Code'].str.contains('Invoice Number: ', na = False)].index
-    data.loc[inv_ids,'Invoice'] = data.loc[inv_ids,'Product Code'].str.replace('Invoice Number: ', '', regex = False)
-    data['Invoice'] = data['Invoice'].ffill()
+    # Create 'invoice number' from 'product code'
+    inv_ids = data[data['product code'].str.contains('Invoice Number: ', na = False)].index
+    data.loc[inv_ids,'invoice number'] = data.loc[inv_ids,'product code'].str.replace('Invoice Number: ', '', regex = False)
+    data['invoice number'] = data['invoice number'].ffill()
 
-    data = drop_na_by_name(data,['Description'])
-    data = data.drop(columns='Product Code').copy()
-    data = drop_na_by_name(data,['Qty'])
-    data = make_columns_numeric(data,['Qty','Total Price'])
+    data = drop_na_by_name(data,['product description'])
+    data = data.drop(columns='product code').copy()
+    data = drop_na_by_name(data,['qty'])
+    data = make_columns_numeric(data,['qty','sales revenue'])
     data['Remark'] = 'sales'
     return data

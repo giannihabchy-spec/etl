@@ -21,4 +21,5 @@ def preprocess(path):
     data = make_columns_numeric(data,['Qty'])
     cols = ['Product','From Location','From Branch','To Location','To Branch','Qty','Date']
     data = data[cols]
+    data.columns = ['product','from location','from branch','to location','to branch','qty','date']
     return data

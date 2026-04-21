@@ -20,4 +20,5 @@ def preprocess(path):
     cols = ['Product Description', 'Qty', 'Remark','Date','Unit Cost','Location']
     data =  data[cols].copy()
     data = make_columns_numeric(data,['Qty','Unit Cost'])
+    data.columns = ['product', 'qty', 'original remarks','date','unit cost','location']
     return data

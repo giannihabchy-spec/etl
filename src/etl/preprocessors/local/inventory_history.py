@@ -14,4 +14,5 @@ def preprocess(path):
     data.columns = ['Product Description', 'Qty', 'Location']
     data = data.dropna(how='any').copy()
     data = make_columns_numeric(data,['Qty'])
+    data.columns = ['product description', 'qty', 'location']
     return data

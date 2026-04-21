@@ -24,9 +24,9 @@ def preprocess(path):
     data['qtyy'] = data['qty']
     data = make_columns_numeric(data,['qtyy'],er='coerce')
     data = drop_na_by_name(data,['qtyy'])
-    data.columns = ['Product Description','Qty', 'Remark', 'Unit Cost','Date','Location','qty_0']
-    cols = ['Product Description','Date', 'Qty', 'Remark','Unit Cost','Location']
+    data.columns = ['product','qty', 'original remarks', 'unit cost','date','location','qty_0']
+    cols = ['product','date', 'qty', 'original remarks','unit cost','location']
     data = data[cols].copy()
-    data = make_columns_numeric(data,['Qty','Unit Cost'])
-    data = make_columns_date(data,['Date'])
+    data = make_columns_numeric(data,['qty','unit cost'])
+    data = make_columns_date(data,['date'])
     return data

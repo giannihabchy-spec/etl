@@ -20,7 +20,8 @@ def preprocess(path):
     data = drop_na_by_name(data,['Qty'])
     data = drop_na_by_name(data,['Description'])
     data.columns = ['Qty','Code','Product Description', 'Remark', 'Location', 'Date']
-    cols = ['Location', 'Qty', 'Product Description', 'Remark', 'Date']
+    cols = ['Location','Qty','Product Description', 'Remark','Date']
     data = data[cols].copy()
     data = make_columns_date(data,['Date'])
+    data.columns = ['location','qty','product description','original remark','date']
     return data

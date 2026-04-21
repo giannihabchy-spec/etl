@@ -39,4 +39,8 @@ def preprocess(path):
     cols = ['Description','Qty','Total Price','Customer','Location','Date','Invoice']
     data = data[cols].copy()
     data['Remark'] = 'sales'
+    data.columns = ['product description','qty','sales revenue','customer','location','date','invoice number','remark']
     return data
+
+
+

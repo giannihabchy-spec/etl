@@ -15,4 +15,5 @@ def preprocess(path):
     data = drop_na_by_name(data,['QTY'])
     data = remove_repeated_headers(data,'QTY')
     data = make_columns_numeric(data,['QTY'])
+    data.columns = ['check','description','qty']
     return data

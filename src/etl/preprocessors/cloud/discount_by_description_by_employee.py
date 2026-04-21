@@ -15,4 +15,5 @@ def preprocess(path):
     data = make_columns_numeric(data,['Discount','Amount'])
     data = clean_check(data,['Check'])
     data['Discount_Percentage'] = data['Discount'] / data['Amount']
-    return data
+    data.columns = ['check', 'discount', 'amount', 'discount_percentage']
+    return data 

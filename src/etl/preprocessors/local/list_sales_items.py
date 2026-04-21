@@ -29,5 +29,6 @@ def preprocess(path):
     cols = ['Category', 'Group', 'Description', 'Price']
     data = data[cols]
     data = make_columns_numeric(data,['Price'])
+    data.columns = ['category', 'group', 'menu items', 'sp exc vat']
 
     return data

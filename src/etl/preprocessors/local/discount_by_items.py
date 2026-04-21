@@ -12,4 +12,5 @@ def preprocess(path):
     data = drop_na_by_name(data,['Check'])
     data = clean_check(data,['Check'])
     data = make_columns_numeric(data,['QTY'])
+    data.columns = ['check', 'description', 'qty']
     return data

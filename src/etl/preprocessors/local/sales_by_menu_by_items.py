@@ -18,4 +18,5 @@ def preprocess(path):
     data['Total Amount'] = data['Total Amount'].shift(-1)
     data = drop_na_by_name(data,['Description'])
     data = make_columns_numeric(data,['Qty','Total Amount'])
+    data.columns = ['description', 'qty sold', 'gross sales']
     return data

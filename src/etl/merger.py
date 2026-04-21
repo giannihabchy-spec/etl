@@ -7,24 +7,24 @@ def merge(cleaned: dict) -> dict:
     disc_by_desc = cleaned.get("discount by description by employee")
     disc_by_invoice = cleaned.get("discount by invoice with details")
     disc_by_item = cleaned.get("discount by items")
-    cols = ["Check", "Description", "QTY", "Discount", "Amount", "Discount_Percentage"]
+    cols = ["check", "description", "qty", "discount", "amount", "discount_percentage"]
 
     if disc_by_desc is not None and disc_by_invoice is not None:
-        disc_by_desc_100 = disc_by_desc[disc_by_desc["Discount_Percentage"] > 0.95].copy()
+        disc_by_desc_100 = disc_by_desc[disc_by_desc["discount_percentage"] > 0.95].copy()
         cleaned["disc_by_desc__disc_by_invoice"] = disc_by_desc_100.merge(
             disc_by_invoice,
             how="left",
-            on="Check",
+            on="check",
         )[cols]
 
     if disc_by_desc is not None and disc_by_item is not None:
         disc_by_item__disc_by_desc = disc_by_item.merge(
             disc_by_desc,
             how="left",
-            on="Check",
+            on="check",
         )[cols]
         disc_by_item__disc_by_desc = disc_by_item__disc_by_desc[
-            disc_by_item__disc_by_desc["Discount_Percentage"] > 0.95
+            disc_by_item__disc_by_desc["discount_percentage"] > 0.95
         ].copy()
 
         if disc_by_item__disc_by_desc.notna().any().any():
@@ -32,7 +32,7 @@ def merge(cleaned: dict) -> dict:
             ids = disc_by_item__disc_by_desc.index
             cleaned["disc_by_item__disc_by_desc"] = make_columns_numeric(
                 disc_by_item__disc_by_desc,
-                ["QTY", "Discount", "Amount", "Discount_Percentage"],
+                ["qty", "discount", "amount", "discount_percentage"],
             )
             cleaned["discount by items"] = cleaned["discount by items"].drop(index=ids)
 

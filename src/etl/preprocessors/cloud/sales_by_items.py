@@ -9,8 +9,8 @@ from etl.utils import make_columns_numeric
 def preprocess(path):
     data = read(path)
     data = keep_cols_by_index(data,[0,2,3])
-    data.columns = ['Description','Qty','Total Amount']
-    data = drop_na_by_name(data,['Qty'])
-    data = remove_repeated_headers(data,'Qty')
-    data = make_columns_numeric(data,['Qty','Total Amount'])
+    data.columns = ['description', 'qty sold', 'gross sales']
+    data = drop_na_by_name(data,['qty sold'])
+    data = remove_repeated_headers(data,'description')
+    data = make_columns_numeric(data,['qty sold','gross sales'])
     return data

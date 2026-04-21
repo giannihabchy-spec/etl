@@ -38,5 +38,6 @@ def preprocess(path):
 
     cols = ['Category', 'Group', 'Description', 'Price']
     data = data[cols]
+    data.columns = ['category', 'group', 'menu items', 'sp exc vat']
 
     return data

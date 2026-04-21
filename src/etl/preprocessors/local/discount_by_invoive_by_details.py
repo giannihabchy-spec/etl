@@ -19,4 +19,5 @@ def preprocess(path):
     cols = ['Check', 'Description', 'QTY']
     data = data[cols]
     data = make_columns_numeric(data,['QTY'])
+    data.columns = ['check', 'description', 'qty']
     return data

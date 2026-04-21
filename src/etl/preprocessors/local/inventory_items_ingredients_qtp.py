@@ -27,4 +27,5 @@ def preprocess(path):
     cols = ['Production Name', 'Product Description', 'Qty','Qty to be Prepared', 'Prepared Unit']
     data = data[cols].copy()
     data = make_columns_numeric(data,['Qty','Qty to be Prepared'])
+    data.columns = ['production name', 'product description', 'qty','qty to prepared', 'prepared unit']
     return data

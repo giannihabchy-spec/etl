@@ -9,4 +9,5 @@ def preprocess(path):
     data = data.iloc[:,[1,-1]].copy()
     data.columns=['Category', 'Total']
     data = make_columns_numeric(data,['Total'])
+    data.columns = ['category', 'total']
     return data

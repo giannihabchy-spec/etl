@@ -24,5 +24,5 @@ def preprocess(path):
     data = make_columns_numeric(data, ['qty'])
     cols = ['item','desc','qty']
     data = data[cols]
-    data.columns = ['Item', 'Ingredient', 'Qty']
+    data.columns = ['menu items','product description','qty']
     return data

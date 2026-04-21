@@ -7,7 +7,7 @@ def write_master(
     jobs: list[dict],
     output_path: str | None = None,
     suppress_warnings: bool = False,
-    log_func = print
+    log_func=print
 ) -> None:
     if output_path is None:
         output_path = master_path
@@ -20,44 +20,62 @@ def write_master(
             try:
                 df = cleaned[job["key"]].copy()
                 sht = wb.sheets[job["sheet"]]
-            except KeyError as e:
+            except KeyError:
                 if not suppress_warnings:
                     log_func(f"⚠ {job.get('key','?')} not available")
                 continue
 
-            log_func(f"{job.get("key")} -> {job.get("sheet")}")
+            log_func(f"{job.get('key')} -> {job.get('sheet')}")
 
-            df_cols = list(job["df_cols"])
-            excel_cols = list(job["excel_cols"])
-
-            if len(df_cols) != len(excel_cols):
-                log_func(f"⚠ {job.get('key','?')} df_cols and excel_cols length mismatch")
-                continue
-
-            try:
-                df = df.loc[:, df_cols]
-            except KeyError as e:
-                log_func(f"⚠ {job.get('key','?')} missing df column: {e}")
-                continue
-
+            cols = list(job["cols"])
             start_row = int(job["start_row"])
+            header_row = start_row - 1
 
+            # case-insensitive df column mapping
+            df_col_map = {str(c).strip().lower(): c for c in df.columns}
+
+            # read excel headers from header row
+            last_col = sht.used_range.last_cell.column
+            header_values = sht.range((header_row, 1), (header_row, last_col)).value
+            if header_values is None:
+                header_values = []
+            elif not isinstance(header_values, list):
+                header_values = [header_values]
+
+            # case-insensitive excel header mapping -> column index
+            excel_col_map = {
+                str(v).strip().lower(): i
+                for i, v in enumerate(header_values, start=1)
+                if v not in (None, "")
+            }
+
+            # keep same behavior: select requested columns first
+            df_real_cols = [df_col_map[col.strip().lower()] for col in cols]
+            df = df.loc[:, df_real_cols]
+
+            # find where to append based on matching excel headers
             last_row = start_row - 1
             bottom = sht.cells.last_cell.row
 
-            for col in excel_cols:
-                vals = sht.range(f"{col}{start_row}:{col}{bottom}").value
-                if not vals:
+            for col in cols:
+                excel_col_idx = excel_col_map[col.strip().lower()]
+                vals = sht.range((start_row, excel_col_idx), (bottom, excel_col_idx)).value
+
+                if vals is None:
                     continue
+                if not isinstance(vals, list):
+                    vals = [vals]
+
                 for i, v in enumerate(vals):
                     if v not in (None, ""):
                         last_row = max(last_row, start_row + i)
 
             write_row = start_row if last_row < start_row else last_row + 1
 
-            for col_name, excel_col in zip(df_cols, excel_cols):
-                rng = f"{excel_col}{write_row}"
-                sht.range(rng).options(index=False, header=False).value = df[[col_name]].to_numpy()
+            # write each column to the matching excel header column
+            for requested_col, real_df_col in zip(cols, df_real_cols):
+                excel_col_idx = excel_col_map[requested_col.strip().lower()]
+                sht.range((write_row, excel_col_idx)).options(index=False, header=False).value = df[[real_df_col]].to_numpy()
 
         wb.save(output_path)
         wb.close()
