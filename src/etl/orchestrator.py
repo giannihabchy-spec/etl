@@ -94,7 +94,7 @@ def clean_folder(folder: str | Path, source: Literal["cloud", "local"] = "cloud"
                 if isinstance(result, pd.DataFrame):
                     nan_cols = result.columns[result.isna().any()].tolist()
                     if nan_cols:
-                        log_func(f"⚠ NaNs in {output_name}: {nan_cols}")
+                        log_func(f"⚠️ NaNs in {output_name}: {nan_cols}")
 
                 log_func(f"Cleaned {p.name} -> {output_name}")
 
@@ -116,7 +116,7 @@ def clean_folder(folder: str | Path, source: Literal["cloud", "local"] = "cloud"
             if isinstance(result, pd.DataFrame):
                 nan_cols = result.columns[result.isna().any()].tolist()
                 if nan_cols:
-                    log_func(f"⚠ NaNs in {output_name}: {nan_cols}")
+                    log_func(f"⚠️ NaNs in {output_name}: {nan_cols}")
 
             log_func(f"Cleaned {p.name} -> {output_name}")
 

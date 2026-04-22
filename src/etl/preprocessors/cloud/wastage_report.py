@@ -11,10 +11,10 @@ from etl.utils import make_columns_numeric, make_columns_date
 def preprocess(path):
     data = read(path)
     data = keep_cols_by_index(data,[0,3,4,10,13])
-    data.columns = ['qty', 'product description', 'original remark', 'date', 'location']
+    data.columns = ['qty', 'product description', 'original remarks', 'date', 'location']
     data = drop_na_by_name(data,['product description'])
     data = remove_repeated_headers(data,'qty')
-    cols = ['location','qty','product description','original remark','date']
+    cols = ['location','qty','product description','original remarks','date']
     data = data[cols]
     data = drop_na_by_name(data,['date'])
     data = make_columns_numeric(data,['qty'])

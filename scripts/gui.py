@@ -18,11 +18,13 @@ from etl.strip_all import strip_all
 from etl.special_characters import special_char
 from etl.saver import save_cleaned_data
 from etl.reset_view import reset_workbook_view
-from etl.end_to_beg import end_to_beg
 from etl.prev_unit_cost import uc_pre_month
 from etl.clearer import clear_all
 from etl.clear_sheets import clear_sheets
 from etl.writer import write_master
+from etl.validators import check_sheets_exist, get_missing_columns
+from etl.locate_cols import get_excel_cols
+from etl.extract_sheets import extract_sheets
 
 st.markdown("""
     <style>
@@ -109,15 +111,45 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
             st.success("✅ Successfully cleaned available data")
 
         else:
+            
+            with st.status("Opening Workbook...", expanded=True) as status_ow:
+                reset_workbook_view(master_path)
+                st.write('Completed')
+                status_ow.update(label='Opening Workbook',state="complete", expanded=True)
 
-            # --- SUBSEQUENT BOXES ---
+
             if mode == "all":
-                with st.status("End -> Beg...", expanded=True) as status_eb:
-                    reset_workbook_view(master_path)
-                    end_to_beg(str(master_path))
+                with st.status("Extracting sheets...", expanded=True) as status_ex:
+                    ex_res = extract_sheets(master_path, ['Ending'], jobs, cleaned)
+                    jobs = ex_res['jobs']
+                    cleaned = ex_res['cleaned_dict']
                     st.write("Completed")
-                    status_eb.update(label="End -> Beg", state="complete", expanded=True)
+                    status_ex.update(label="Extracting sheets", state="complete", expanded=True)
 
+            with st.status("Validating Workbook...", expanded=True) as status_vw:
+                missing_sheets = check_sheets_exist(master_path, jobs)
+                if missing_sheets['status'] != 'ok':
+                    st.write(missing_sheets['msg'])
+                    status_vw.update(label='Validating Workbook',state="error", expanded=True)
+                    st.stop()
+                st.write(missing_sheets['msg'])
+                missing_cols = get_missing_columns(master_path, jobs)
+                if missing_cols['status'] != 'ok':
+                    st.write(missing_cols['msg'])
+                    status_vw.update(label='Validating Workbook',state="error", expanded=True)
+                    st.stop()
+                st.write(missing_cols['msg'])
+                loc_res = get_excel_cols(master_path, jobs)
+                if loc_res['status'] != 'ok':
+                    st.write(loc_res['msg'])
+                    status_vw.update(label='Locating columns',state="error", expanded=True)
+                    st.stop() 
+                jobs = loc_res['result']
+                st.write(loc_res['msg'])
+                status_vw.update(label="Validating Workbook", state="complete", expanded=True)
+
+
+            if mode == "all":
                 with st.status("UNIT COST -> UC PRE MONTH...", expanded=True) as status_uc:
                     uc_pre_month(str(master_path), log_func=st.write)
                     st.write("Completed")
@@ -135,7 +167,6 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
             else:
                 with st.status("Clearing...", expanded=True) as status_clear:
                     clear_sheets(str(master_path), jobs=jobs, cleaned=cleaned, log_func=st.write)
-                    st.write("Completed")
                     status_clear.update(label="Clearing", state="complete", expanded=True)
 
                 with st.status("Writing...", expanded=True) as status_write:

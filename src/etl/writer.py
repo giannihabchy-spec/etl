@@ -22,7 +22,7 @@ def write_master(
                 sht = wb.sheets[job["sheet"]]
             except KeyError as e:
                 if not suppress_warnings:
-                    log_func(f"⚠ {job.get('key','?')} not available")
+                    log_func(f"⚠️ {job.get('key','?')} not available")
                 continue
 
             log_func(f"{job.get("key")} -> {job.get("sheet")}")
@@ -31,13 +31,13 @@ def write_master(
             excel_cols = list(job["excel_cols"])
 
             if len(df_cols) != len(excel_cols):
-                log_func(f"⚠ {job.get('key','?')} df_cols and excel_cols length mismatch")
+                log_func(f"⚠️ {job.get('key','?')} df_cols and excel_cols length mismatch")
                 continue
 
             try:
                 df = df.loc[:, df_cols]
             except KeyError as e:
-                log_func(f"⚠ {job.get('key','?')} missing df column: {e}")
+                log_func(f"⚠️ {job.get('key','?')} missing df column: {e}")
                 continue
 
             start_row = int(job["start_row"])

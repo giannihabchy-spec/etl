@@ -23,5 +23,5 @@ def preprocess(path):
     cols = ['Location','Qty','Product Description', 'Remark','Date']
     data = data[cols].copy()
     data = make_columns_date(data,['Date'])
-    data.columns = ['location','qty','product description','original remark','date']
+    data.columns = ['location','qty','product description','original remarks','date']
     return data

@@ -1,15 +1,27 @@
+import xlwings as xw
+    
+
 def check_sheets_exist(file_path, config_list):
     with xw.Book(file_path) as wb:
-        existing_sheets = [sheet.name for sheet in wb.sheets]
+        existing_sheets = {sheet.name for sheet in wb.sheets}
 
-        return [
+        missing = [
             config['sheet']
             for config in config_list
             if config['sheet'] not in existing_sheets
         ]
-    
 
-import xlwings as xw
+        if missing:
+            return {
+                'status': 'error',
+                'msg': f"Missing sheets: {', '.join(missing)}"
+            }
+
+        return {
+            'status': 'ok',
+            'msg': 'All sheets exist'
+        }
+    
 
 def get_missing_columns(wb_path, sheets_config, case_sensitive=False):
 
@@ -51,7 +63,20 @@ def get_missing_columns(wb_path, sheets_config, case_sensitive=False):
                 result[sheet_name] = missing
 
         wb.close()
-        return result
+
+        if result:
+            messages = [
+                f"Sheet '{sheet}' is missing columns: {', '.join(cols)}."
+                for sheet, cols in result.items()]
+            return {
+                'status': 'error',
+                'msg': '  \n'.join(messages)
+            }
+        
+        return {
+            'status': 'ok',
+            'msg': 'All columns exist'
+        }
 
     finally:
         app.quit()

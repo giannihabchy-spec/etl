@@ -41,7 +41,7 @@ def preprocess(path):
     data = data[cols].copy()
     data = make_columns_date(data,['Purchase Date'])
     data = make_columns_numeric(data,['Total','Qty'])
-    data.columns = ['location', 'raw_materials','qty','total cost','supplier names','invoice #','purchase date']
+    data.columns = ['location', 'raw materials','qty','total cost','supplier names','invoice #','purchase date']
     return data
 
 

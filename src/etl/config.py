@@ -170,7 +170,7 @@ JOBS_LOCAL = [
 
     { # inventory / summary of sales by customer by items -> W.Inv #### ----------
     "key": "inventory / summary of sales by customer by items",
-    "df_cols": ['location','qty','product description','remark','date','sales revenue','invoice number','customer'],
+    "df_cols": ['location','qty','product description','remarks','date','sales revenue','invoice number','customer'],
     "sheet": "W.Inv",
     "start_row": 2,
     },
@@ -184,7 +184,7 @@ JOBS_LOCAL = [
 
     { # sales / summary of sales by customer by items -> W.Sal #### ----------
     "key": "sales / summary of sales by customer by items",
-    "df_cols": ['product', 'qty', 'remark','date','total','invoice number','customer'],
+    "df_cols": ['product', 'qty', 'remarks','date','total','invoice number','customer'],
     "sheet": "W.Sal",
     "start_row": 2,
     },

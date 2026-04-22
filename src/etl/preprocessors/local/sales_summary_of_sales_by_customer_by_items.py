@@ -30,5 +30,5 @@ def preprocess(path):
     data = make_columns_numeric(data,['Qty','Total Price'])
     data = make_columns_date(data,['Date'])
     data['Remark'] = 'sales'
-    data.columns = ['product', 'qty','total','customer','location','date','invoice number', 'remark']
+    data.columns = ['product', 'qty','total','customer','location','date','invoice number', 'remarks']
     return data

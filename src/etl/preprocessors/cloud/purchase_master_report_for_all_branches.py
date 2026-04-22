@@ -18,5 +18,5 @@ def preprocess(path):
     data = remove_repeated_headers(data,'Location')
     data = make_columns_numeric(data,['Total','Qty'])
     data = make_columns_date(data,['Purchase Date'])
-    data.columns = ['location', 'raw_materials','qty','total cost','supplier names','invoice #','purchase date']
+    data.columns = ['location', 'raw materials','qty','total cost','supplier names','invoice #','purchase date']
     return data
