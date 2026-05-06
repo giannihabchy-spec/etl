@@ -124,7 +124,15 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
                     jobs = ex_res['jobs']
                     cleaned = ex_res['cleaned_dict']
                     st.write("Completed")
-                    status_ex.update(label="Extracting sheets", state="complete", expanded=True)
+                    status_ex.update(label="Extracting sheets", state="complete", expanded=True)######## honnnn
+
+                # with st.status("test", expanded=True) as status_test:
+                #     save_cleaned_data(cleaned, base_folder, 'testtt.xlsx')
+                #     st.write(jobs)
+                #     status_test.update(label="test", state="complete", expanded=True)
+                #     st.stop()
+
+
 
             with st.status("Validating Workbook...", expanded=True) as status_vw:
                 missing_sheets = check_sheets_exist(master_path, jobs)
@@ -161,7 +169,7 @@ if st.button("▶ Run Pipeline", type="primary", use_container_width=True):
                     status_clear.update(label="Clearing", state="complete", expanded=True)
 
                 with st.status("Writing...", expanded=True) as status_write:    
-                    write_master(str(master_path), cleaned, jobs, log_func=st.write)
+                    write_master(str(master_path), cleaned, jobs, suppress_warnings=True, log_func=st.write)
                     status_write.update(label="Writing", state="complete", expanded=True)
                     st.write("Loaded all available data")
             else:
