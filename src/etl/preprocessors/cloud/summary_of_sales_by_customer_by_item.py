@@ -4,6 +4,7 @@ from etl.utils import keep_cols_by_index
 from etl.utils import remove_repeated_headers
 from etl.utils import drop_na_by_name
 from etl.utils import make_columns_numeric
+from etl.utils import drop_rows
 
 def preprocess(path):
     data = read(path)
@@ -24,6 +25,8 @@ def preprocess(path):
     data['location'] = data['location'].ffill()
 
     # 'date' is 'product code' converted to type date
+    date_ids = data[data['product description'].str.contains('From Date:',na=False)].index
+    data = data.drop(index=date_ids).copy()
     data['date'] = pd.to_datetime(data['product code'],errors='coerce').dt.date
     data['date'] = data['date'].ffill()
 
